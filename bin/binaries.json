@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "repository": "https://github.com/QudsLab/Proof-of-work",
-  "generated": "2025-12-06T19:00:33.811415Z",
+  "generated": "2025-12-06T19:08:34.046236Z",
   "binaries": {
     "android/arm64": [
       {
@@ -256,6 +256,58 @@
         "hashes": {
           "md5": "0033188112cadff5e894e1cc4dcc438f",
           "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
+        }
+      }
+    ],
+    "wasm/wasm": [
+      {
+        "filename": "export.h",
+        "path": "include/export.h",
+        "size": 642,
+        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/include/export.h",
+        "hashes": {
+          "md5": "0033188112cadff5e894e1cc4dcc438f",
+          "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
+        }
+      },
+      {
+        "filename": "client.js",
+        "path": "js/client.js",
+        "size": 14205,
+        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/client.js",
+        "hashes": {
+          "md5": "7c7a9cf2cb65acd9d9edc9c436c04412",
+          "sha256": "c051a24398bccd7d84b3b6498f0a5bc595207616f6d92a6afcdb8b7a95da7951"
+        }
+      },
+      {
+        "filename": "server.js",
+        "path": "js/server.js",
+        "size": 14165,
+        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/server.js",
+        "hashes": {
+          "md5": "f40906446927476108e09cfef54384a5",
+          "sha256": "7c2c4c698e510d6044669618b2c35a2f9950e395c3b0f177c061ea08b759f021"
+        }
+      },
+      {
+        "filename": "server.wasm",
+        "path": "js/server.wasm",
+        "size": 99152,
+        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/server.wasm",
+        "hashes": {
+          "md5": "f7d7c9b966f21768844a80ca8384748a",
+          "sha256": "e2d6e1fdfa3accf6f489f5587a3d7705ac373c4ccdf81ba6f0beb5d37dc56b1d"
+        }
+      },
+      {
+        "filename": "client.wasm",
+        "path": "js/client.wasm",
+        "size": 99897,
+        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/client.wasm",
+        "hashes": {
+          "md5": "287d0f4bc07c5f19c2a7c7a081ef772a",
+          "sha256": "2a9bffc579db89d8b54e639ae424e0f951b712b3875d59d8588d747735d8fbbb"
         }
       }
     ]
