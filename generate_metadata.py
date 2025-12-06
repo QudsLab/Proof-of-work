@@ -101,8 +101,18 @@ def main():
             
             github_url = f"{GITHUB_RAW_BASE}/{quote(github_path)}"
             
+            # Determine file category
+            file_category = "runtime"
+            if "c_lib" in str(rel_path):
+                file_category = "c_development"
+            elif "include" in str(rel_path):
+                file_category = "headers"
+            elif file_path.suffix in ['.js']:
+                file_category = "javascript"
+            
             binary_info[platform_key].append({
                 'filename': file_path.name,
+                'category': file_category,
                 'path': str(rel_path),
                 'size': len(file_content),
                 'url': github_url,
@@ -117,14 +127,23 @@ def main():
         'version': '1.0.0',
         'repository': f"https://github.com/{GITHUB_REPO}",
         'generated': datetime.utcnow().isoformat() + 'Z',
-        'binaries': {}
+        'platforms': {}
     }
     
+    # Organize by platform
     for platform_key in sorted(binary_info.keys()):
-        metadata['binaries'][platform_key] = binary_info[platform_key]
+        os_name, variant = platform_key.split('/')
+        
+        if os_name not in metadata['platforms']:
+            metadata['platforms'][os_name] = {}
+        
+        metadata['platforms'][os_name][variant] = {
+            'files': binary_info[platform_key],
+            'count': len(binary_info[platform_key])
+        }
     
     json_path = bin_dir / 'binaries.json'
-    json_path.write_text(json.dumps(metadata, indent=2))
+    json_path.write_text(json.dumps(metadata, indent=2, sort_keys=False))
     total_files = sum(len(files) for files in binary_info.values())
     print(f"✓ Generated {json_path} with {total_files} entries")
     
