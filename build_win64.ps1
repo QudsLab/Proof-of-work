@@ -22,21 +22,23 @@ Write-Host "=" -NoNewline; Write-Host ("=" * 79)
 
 # Define paths
 $libPath = ".\bin\win\64\lib"
-$dllPath = ".\bin\win\64\dll"
+$cLibPath = ".\bin\win\64\c_lib"
+$includePath = ".\bin\win\64\include"
 $src_dir = ".\src"
 $cryptoPath = "$src_dir\crypto"
 
 # Create directory structure if missing
 New-Item -ItemType Directory -Force -Path $libPath | Out-Null
-New-Item -ItemType Directory -Force -Path $dllPath | Out-Null
+New-Item -ItemType Directory -Force -Path $cLibPath | Out-Null
+New-Item -ItemType Directory -Force -Path $includePath | Out-Null
 
 Write-Host "`nStep 1: Cleaning previous builds..."
 
 # Remove old DLLs and libs (if they exist)
-Remove-Item -Path "$dllPath\client.dll" -ErrorAction SilentlyContinue
-Remove-Item -Path "$libPath\client.lib" -ErrorAction SilentlyContinue
-Remove-Item -Path "$dllPath\server.dll" -ErrorAction SilentlyContinue
-Remove-Item -Path "$libPath\server.lib" -ErrorAction SilentlyContinue
+Remove-Item -Path "$libPath\client.dll" -ErrorAction SilentlyContinue
+Remove-Item -Path "$cLibPath\client.lib" -ErrorAction SilentlyContinue
+Remove-Item -Path "$libPath\server.dll" -ErrorAction SilentlyContinue
+Remove-Item -Path "$cLibPath\server.lib" -ErrorAction SilentlyContinue
 
 Write-Host "  OK Cleaned old builds"
 
@@ -123,7 +125,7 @@ Write-Host "  OK Configured $($includePaths.Count) include paths"
 Write-Host "`nStep 4: Building client.dll..."
 
 $clientSources = "$src_dir\client.c " + ($hashSources -join " ")
-$clientCmd = "gcc -shared -static-libgcc -o `"$dllPath\client.dll`" $clientSources $includeFlags `"-Wl,--out-implib,$libPath\client.lib`""
+$clientCmd = "gcc -shared -static-libgcc -o `"$libPath\client.dll`" $clientSources $includeFlags `"-Wl,--out-implib,$cLibPath\client.lib`""
 
 Write-Host "  Compiling..."
 $output = Invoke-Expression $clientCmd 2>&1
@@ -134,8 +136,8 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-if (Test-Path "$dllPath\client.dll") {
-    $size = (Get-Item "$dllPath\client.dll").Length / 1KB
+if (Test-Path "$libPath\client.dll") {
+    $size = (Get-Item "$libPath\client.dll").Length / 1KB
     Write-Host (("  OK client.dll built successfully ({0})" -f [math]::Round($size,2)) + " KB") -ForegroundColor Green
 } else {
     Write-Host "  ERROR: client.dll not found after build" -ForegroundColor Red
@@ -146,7 +148,7 @@ if (Test-Path "$dllPath\client.dll") {
 Write-Host "`nStep 5: Building server.dll..."
 
 $serverSources = "$src_dir\server.c " + ($hashSources -join " ")
-$serverCmd = "gcc -shared -static-libgcc -o `"$dllPath\server.dll`" $serverSources $includeFlags `"-Wl,--out-implib,$libPath\server.lib`""
+$serverCmd = "gcc -shared -static-libgcc -o `"$libPath\server.dll`" $serverSources $includeFlags `"-Wl,--out-implib,$cLibPath\server.lib`""
 
 Write-Host "  Compiling..."
 $output = Invoke-Expression $serverCmd 2>&1
@@ -157,13 +159,18 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-if (Test-Path "$dllPath\server.dll") {
-    $size = (Get-Item "$dllPath\server.dll").Length / 1KB
+if (Test-Path "$libPath\server.dll") {
+    $size = (Get-Item "$libPath\server.dll").Length / 1KB
     Write-Host (("  OK server.dll built successfully ({0})" -f [math]::Round($size,2)) + " KB") -ForegroundColor Green
 } else {
     Write-Host "  ERROR: server.dll not found after build" -ForegroundColor Red
     exit 1
 }
+
+# Copy export header
+Write-Host "`nStep 6: Copying headers..."
+Copy-Item "$src_dir\export.h" "$includePath\" -Force
+Write-Host "  OK Copied export.h to include/"
 
 
 ################################################################################
@@ -182,7 +189,7 @@ if (Test-Path "$dllPath\server.dll") {
 
 $pythonPath = "python"
 # Run tests
-Write-Host "`nStep 6: Running test suite..."
+Write-Host "`nStep 7: Running test suite..."
 Write-Host "=" -NoNewline; Write-Host ("=" * 79)
 
 try {
