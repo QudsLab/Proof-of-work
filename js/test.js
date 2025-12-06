@@ -1,65 +1,61 @@
 #!/usr/bin/env node
 /**
- * WebAssembly Test for Proof-of-Work Binaries
- * Tests both client and server WASM modules
+ * Minimal WebAssembly Test for Proof-of-Work Binaries
+ * Verifies WASM files exist and are loadable
  */
 
 const fs = require('fs');
 const path = require('path');
 
-async function testWasm() {
-  console.log('🧪 Testing WebAssembly binaries...\n');
+function testWasm() {
+  console.log('\n=== WASM Binary Test ===\n');
 
-  const clientJsPath = path.join(__dirname, '..', 'bin', 'wasm', 'js', 'client.js');
-  const clientWasmPath = path.join(__dirname, '..', 'bin', 'wasm', 'js', 'client.wasm');
-  const serverJsPath = path.join(__dirname, '..', 'bin', 'wasm', 'js', 'server.js');
-  const serverWasmPath = path.join(__dirname, '..', 'bin', 'wasm', 'js', 'server.wasm');
-
-  // Check if files exist
+  const wasmDir = path.join(__dirname, '..', 'bin', 'wasm', 'js');
   const files = [
-    { path: clientJsPath, name: 'client.js' },
-    { path: clientWasmPath, name: 'client.wasm' },
-    { path: serverJsPath, name: 'server.js' },
-    { path: serverWasmPath, name: 'server.wasm' }
+    'client.js',
+    'client.wasm',
+    'server.js',
+    'server.wasm'
   ];
 
-  let allExist = true;
-  for (const file of files) {
-    if (fs.existsSync(file.path)) {
-      const stats = fs.statSync(file.path);
-      console.log(`✓ ${file.name} exists (${stats.size} bytes)`);
-    } else {
-      console.log(`✗ ${file.name} NOT FOUND`);
-      allExist = false;
-    }
-  }
+  let allPass = true;
 
-  if (!allExist) {
-    console.error('\n❌ Some WASM files are missing!');
+  // Check file existence and sizes
+  files.forEach(filename => {
+    const filepath = path.join(wasmDir, filename);
+    if (fs.existsSync(filepath)) {
+      const stats = fs.statSync(filepath);
+      const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
+      console.log(`[OK] ${filename.padEnd(15)} (${sizeMB} MB)`);
+    } else {
+      console.log(`[FAIL] ${filename} - NOT FOUND`);
+      allPass = false;
+    }
+  });
+
+  if (!allPass) {
+    console.log('\n[FAIL] Some WASM files are missing\n');
     process.exit(1);
   }
 
-  console.log('\n✓ All WASM files present');
-  
-  // Try to load the modules (basic smoke test)
+  // Basic module loading test
   try {
-    console.log('\n🔍 Loading client module...');
-    const ClientModule = require(clientJsPath);
-    console.log('✓ Client module loaded');
-
-    console.log('\n🔍 Loading server module...');
-    const ServerModule = require(serverJsPath);
-    console.log('✓ Server module loaded');
-
-    console.log('\n✅ WASM test passed!');
+    const clientPath = path.join(wasmDir, 'client.js');
+    const serverPath = path.join(wasmDir, 'server.js');
+    
+    // Just verify they can be required (syntax check)
+    require(clientPath);
+    console.log('[OK] client.js loads successfully');
+    
+    require(serverPath);
+    console.log('[OK] server.js loads successfully');
+    
+    console.log('\n[PASS] All WASM tests passed\n');
     process.exit(0);
   } catch (error) {
-    console.error('\n❌ Error loading WASM modules:', error.message);
+    console.log(`\n[FAIL] Module loading error: ${error.message}\n`);
     process.exit(1);
   }
 }
 
-testWasm().catch(error => {
-  console.error('Fatal error:', error);
-  process.exit(1);
-});
+testWasm();
