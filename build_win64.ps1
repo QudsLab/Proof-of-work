@@ -205,10 +205,14 @@ try {
         Write-Host "BUILD AND TEST SUCCESSFUL!" -ForegroundColor Green
         Write-Host ("=" * 80)
         Write-Host "`nBuilt libraries:"
-        Write-Host "  - $dllPath\client.dll"
-        Write-Host "  - $dllPath\server.dll"
-        Write-Host "  - $libPath\client.lib"
-        Write-Host "  - $libPath\server.lib"
+        Write-Host "  Runtime (lib/):"
+        Write-Host "    - $libPath\client.dll"
+        Write-Host "    - $libPath\server.dll"
+        Write-Host "  C Development (c_lib/):"
+        Write-Host "    - $cLibPath\client.lib"
+        Write-Host "    - $cLibPath\server.lib"
+        Write-Host "  Headers (include/):"
+        Write-Host "    - $includePath\export.h"
         Write-Host "`nPython utilities:"
         Write-Host "  - pow_utils_client.py"
         Write-Host "  - pow_utils_server.py"
