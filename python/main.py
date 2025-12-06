@@ -27,7 +27,7 @@ if len(sys.argv) > 1:
 
 # Determine library paths based on OS
 if OS__TYPE == "win":
-    BIN_PATH = BASE_DIR / "bin" / "win" / VARIANT / "dll"
+    BIN_PATH = BASE_DIR / "bin" / "win" / VARIANT / "lib"
     SERVER_DLL = str(BIN_PATH / "server.dll")
     CLIENT_DLL = str(BIN_PATH / "client.dll")
 elif OS__TYPE == "linux":
@@ -226,7 +226,7 @@ print("  [OK] Multi-hash PoW with 4, 5, and 6 algorithms")
 print("  [OK] Custom nonce range (starting from non-zero values)")
 print("  [OK] Algorithm-optimized ordering for efficiency")
 print("  [OK] Comprehensive verification tests")
-print("  ✓ Edge case handling and validation")
+print("  [OK] Edge case handling and validation")
 print("\nAll 34 hash algorithms are supported:")
 print("  MD2, MD4, MD5, NT Hash, HAS-160,")
 print("  RIPEMD-128/160/256/320,")
