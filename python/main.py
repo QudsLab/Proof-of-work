@@ -18,16 +18,17 @@ BASE_DIR = Path(__file__).parent.parent
 
 # get system arg for dll paths os and variant only
 # take one arg for os type one for variant
-OS__TYPE = "win"
+OS_TYPE = "win"
 VARIANT = "64"
 if len(sys.argv) > 1:
-    OS__TYPE = sys.argv[1].lower()
+    OS_TYPE = sys.argv[1].lower()
     VARIANT = sys.argv[2].lower()
 
 # BIN_PATH = BASE_DIR / "bin" / "win" / "64" / "dll"
-BIN_PATH = BASE_DIR / "bin" / OS__TYPE / VARIANT / "dll"
-SERVER_DLL = f"{BIN_PATH}/server.dll"
-CLIENT_DLL = f"{BIN_PATH}/client.dll"
+BIN_PATH = BASE_DIR / "bin" / OS_TYPE / VARIANT / "dll"
+
+SERVER_DLL = BIN_PATH / "server.dll"
+CLIENT_DLL = BIN_PATH / "client.dll"
 
 print("=" * 80)
 print("Enhanced Proof-of-Work Test Suite")
