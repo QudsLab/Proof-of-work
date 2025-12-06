@@ -1,6 +1,11 @@
 # Enhanced Proof-of-Work Build Script
 # Builds client and server DLLs with all hash algorithm support
 
+param(
+    [Parameter(Mandatory=$false)]
+    [string]$Variant = "64"
+)
+
 ################################################################################
 ################################################################################
 ###                                                                          ###
@@ -19,11 +24,12 @@
 Write-Host "=" -NoNewline; Write-Host ("=" * 79)
 Write-Host "Enhanced Proof-of-Work Build System"
 Write-Host "=" -NoNewline; Write-Host ("=" * 79)
+Write-Host "`nBuilding for Windows $Variant-bit`n"
 
-# Define paths
-$libPath = ".\bin\win\64\lib"
-$cLibPath = ".\bin\win\64\c_lib"
-$includePath = ".\bin\win\64\include"
+# Define paths using variant parameter
+$libPath = ".\bin\win\$Variant\lib"
+$cLibPath = ".\bin\win\$Variant\c_lib"
+$includePath = ".\bin\win\$Variant\include"
 $src_dir = ".\src"
 $cryptoPath = "$src_dir\crypto"
 
@@ -193,12 +199,12 @@ Write-Host "`nStep 7: Running test suite..."
 Write-Host "=" -NoNewline; Write-Host ("=" * 79)
 
 try {
-    # pass as 1st arg win and 2nd arg 64 to indicate platform
+    # pass as 1st arg win and 2nd arg variant to indicate platform
     Write-Host "=" -NoNewline; Write-Host ("=" * 79)
     Write-Host "  Running Python tests with command:"
-    Write-Host "    python `"$pythonPath/main.py`" win 64`n"
+    Write-Host "    python `"$pythonPath/main.py`" win $Variant`n"
     Write-Host "=" -NoNewline; Write-Host ("=" * 79)
-    python "$pythonPath/main.py" win 64
+    python "$pythonPath/main.py" win $Variant
     Write-Host "=" -NoNewline; Write-Host ("=" * 79)
     if ($LASTEXITCODE -eq 0) {
         Write-Host "`n" + ("=" * 80)
