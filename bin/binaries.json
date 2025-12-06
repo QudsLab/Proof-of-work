@@ -1,315 +1,555 @@
 {
   "version": "1.0.0",
   "repository": "https://github.com/QudsLab/Proof-of-work",
-  "generated": "2025-12-06T19:08:34.046236Z",
-  "binaries": {
-    "android/arm64": [
-      {
-        "filename": "libserver.so",
-        "path": "lib/libserver.so",
-        "size": 215792,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/arm64/lib/libserver.so",
-        "hashes": {
-          "md5": "3da6a58715462a3ea5328fb2776ec0d1",
-          "sha256": "862dc00817edd0ea6e3cd46ef81a11a6fde420cfbb134125bce77d8da6e8f287"
-        }
+  "generated": "2025-12-06T19:17:53.362269Z",
+  "platforms": {
+    "android": {
+      "arm64": {
+        "files": [
+          {
+            "filename": "libserver.so",
+            "category": "c_development",
+            "path": "c_lib/libserver.so",
+            "size": 215792,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/arm64/c_lib/libserver.so",
+            "hashes": {
+              "md5": "3da6a58715462a3ea5328fb2776ec0d1",
+              "sha256": "862dc00817edd0ea6e3cd46ef81a11a6fde420cfbb134125bce77d8da6e8f287"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "c_development",
+            "path": "c_lib/libclient.so",
+            "size": 216288,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/arm64/c_lib/libclient.so",
+            "hashes": {
+              "md5": "ca32c0cc7056c958f4b4a78634864d4c",
+              "sha256": "368cc5563374fb7622f7d4c912ae307f96e61f3b688799fc8fdf7c60c093f74a"
+            }
+          },
+          {
+            "filename": "libserver.so",
+            "category": "runtime",
+            "path": "lib/libserver.so",
+            "size": 215792,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/arm64/lib/libserver.so",
+            "hashes": {
+              "md5": "3da6a58715462a3ea5328fb2776ec0d1",
+              "sha256": "862dc00817edd0ea6e3cd46ef81a11a6fde420cfbb134125bce77d8da6e8f287"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "runtime",
+            "path": "lib/libclient.so",
+            "size": 216288,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/arm64/lib/libclient.so",
+            "hashes": {
+              "md5": "ca32c0cc7056c958f4b4a78634864d4c",
+              "sha256": "368cc5563374fb7622f7d4c912ae307f96e61f3b688799fc8fdf7c60c093f74a"
+            }
+          },
+          {
+            "filename": "export.h",
+            "category": "headers",
+            "path": "include/export.h",
+            "size": 642,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/arm64/include/export.h",
+            "hashes": {
+              "md5": "0033188112cadff5e894e1cc4dcc438f",
+              "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
+            }
+          }
+        ],
+        "count": 5
       },
-      {
-        "filename": "libclient.so",
-        "path": "lib/libclient.so",
-        "size": 216288,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/arm64/lib/libclient.so",
-        "hashes": {
-          "md5": "ca32c0cc7056c958f4b4a78634864d4c",
-          "sha256": "368cc5563374fb7622f7d4c912ae307f96e61f3b688799fc8fdf7c60c093f74a"
-        }
+      "armv7": {
+        "files": [
+          {
+            "filename": "libserver.so",
+            "category": "c_development",
+            "path": "c_lib/libserver.so",
+            "size": 228360,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/armv7/c_lib/libserver.so",
+            "hashes": {
+              "md5": "a570b2e934e3b4e3da7007f1181f690d",
+              "sha256": "e1ee472f2f8b5b083b62b79b467f7623d6d4d5c86fb204377e53fb68b836ecfd"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "c_development",
+            "path": "c_lib/libclient.so",
+            "size": 228812,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/armv7/c_lib/libclient.so",
+            "hashes": {
+              "md5": "5da94bb02a3af8e5a1df9a0a5b051b8a",
+              "sha256": "2c4a69c48bd3d83a61697729817443bb747f657046f930a9389035c11c3fb39f"
+            }
+          },
+          {
+            "filename": "libserver.so",
+            "category": "runtime",
+            "path": "lib/libserver.so",
+            "size": 228360,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/armv7/lib/libserver.so",
+            "hashes": {
+              "md5": "a570b2e934e3b4e3da7007f1181f690d",
+              "sha256": "e1ee472f2f8b5b083b62b79b467f7623d6d4d5c86fb204377e53fb68b836ecfd"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "runtime",
+            "path": "lib/libclient.so",
+            "size": 228812,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/armv7/lib/libclient.so",
+            "hashes": {
+              "md5": "5da94bb02a3af8e5a1df9a0a5b051b8a",
+              "sha256": "2c4a69c48bd3d83a61697729817443bb747f657046f930a9389035c11c3fb39f"
+            }
+          },
+          {
+            "filename": "export.h",
+            "category": "headers",
+            "path": "include/export.h",
+            "size": 642,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/armv7/include/export.h",
+            "hashes": {
+              "md5": "0033188112cadff5e894e1cc4dcc438f",
+              "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
+            }
+          }
+        ],
+        "count": 5
       },
-      {
-        "filename": "export.h",
-        "path": "include/export.h",
-        "size": 642,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/arm64/include/export.h",
-        "hashes": {
-          "md5": "0033188112cadff5e894e1cc4dcc438f",
-          "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
-        }
+      "x86": {
+        "files": [
+          {
+            "filename": "libserver.so",
+            "category": "c_development",
+            "path": "c_lib/libserver.so",
+            "size": 198216,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86/c_lib/libserver.so",
+            "hashes": {
+              "md5": "4ea89b3a40f58e96aab2826b69c12475",
+              "sha256": "dfcb396f3a89434c01bd354c4d30d5889834e313c7caf6d31a788275d446f86f"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "c_development",
+            "path": "c_lib/libclient.so",
+            "size": 198732,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86/c_lib/libclient.so",
+            "hashes": {
+              "md5": "cd83d480fcad50203e27941506e19bc7",
+              "sha256": "d0a24ef5f9cf66ed2ab6560fb79e8ff68a4c0763b4fdc09d5baeefef2fae820b"
+            }
+          },
+          {
+            "filename": "libserver.so",
+            "category": "runtime",
+            "path": "lib/libserver.so",
+            "size": 198216,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86/lib/libserver.so",
+            "hashes": {
+              "md5": "4ea89b3a40f58e96aab2826b69c12475",
+              "sha256": "dfcb396f3a89434c01bd354c4d30d5889834e313c7caf6d31a788275d446f86f"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "runtime",
+            "path": "lib/libclient.so",
+            "size": 198732,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86/lib/libclient.so",
+            "hashes": {
+              "md5": "cd83d480fcad50203e27941506e19bc7",
+              "sha256": "d0a24ef5f9cf66ed2ab6560fb79e8ff68a4c0763b4fdc09d5baeefef2fae820b"
+            }
+          },
+          {
+            "filename": "export.h",
+            "category": "headers",
+            "path": "include/export.h",
+            "size": 642,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86/include/export.h",
+            "hashes": {
+              "md5": "0033188112cadff5e894e1cc4dcc438f",
+              "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
+            }
+          }
+        ],
+        "count": 5
+      },
+      "x86_64": {
+        "files": [
+          {
+            "filename": "libserver.so",
+            "category": "c_development",
+            "path": "c_lib/libserver.so",
+            "size": 185216,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/c_lib/libserver.so",
+            "hashes": {
+              "md5": "5c9f740ef493854a351f1f33f9139bdd",
+              "sha256": "d300561967c007436a53bf548b1265735331d033f8b74b52efe71bdb6cc6e31f"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "c_development",
+            "path": "c_lib/libclient.so",
+            "size": 185848,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/c_lib/libclient.so",
+            "hashes": {
+              "md5": "42d883b751bcd8cea0f51d1f0ca74234",
+              "sha256": "4ce5b8d870974fe659dd1bd01e2976fd4e76fbaa552325d2f629c848b8343ac3"
+            }
+          },
+          {
+            "filename": "libserver.so",
+            "category": "runtime",
+            "path": "lib/libserver.so",
+            "size": 185216,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/lib/libserver.so",
+            "hashes": {
+              "md5": "5c9f740ef493854a351f1f33f9139bdd",
+              "sha256": "d300561967c007436a53bf548b1265735331d033f8b74b52efe71bdb6cc6e31f"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "runtime",
+            "path": "lib/libclient.so",
+            "size": 185848,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/lib/libclient.so",
+            "hashes": {
+              "md5": "42d883b751bcd8cea0f51d1f0ca74234",
+              "sha256": "4ce5b8d870974fe659dd1bd01e2976fd4e76fbaa552325d2f629c848b8343ac3"
+            }
+          },
+          {
+            "filename": "export.h",
+            "category": "headers",
+            "path": "include/export.h",
+            "size": 642,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/include/export.h",
+            "hashes": {
+              "md5": "0033188112cadff5e894e1cc4dcc438f",
+              "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
+            }
+          }
+        ],
+        "count": 5
       }
-    ],
-    "android/armv7": [
-      {
-        "filename": "libserver.so",
-        "path": "lib/libserver.so",
-        "size": 228360,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/armv7/lib/libserver.so",
-        "hashes": {
-          "md5": "a570b2e934e3b4e3da7007f1181f690d",
-          "sha256": "e1ee472f2f8b5b083b62b79b467f7623d6d4d5c86fb204377e53fb68b836ecfd"
-        }
+    },
+    "linux": {
+      "64": {
+        "files": [
+          {
+            "filename": "libserver.so",
+            "category": "c_development",
+            "path": "c_lib/libserver.so",
+            "size": 171720,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/64/c_lib/libserver.so",
+            "hashes": {
+              "md5": "8333f5410976e3f550c9d1b71827e072",
+              "sha256": "2eeb9f13203c63738f07580a74474b6710e35f2661c5ad64f5ef4315ee3bfbf3"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "c_development",
+            "path": "c_lib/libclient.so",
+            "size": 175808,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/64/c_lib/libclient.so",
+            "hashes": {
+              "md5": "3a0277e097b6ca867de8ded1f3aa1c4a",
+              "sha256": "7b0b22d56d59f1ef9a5cf3aadf187f58e39cafad81517f0d5603ac3b009d10e3"
+            }
+          },
+          {
+            "filename": "libserver.so",
+            "category": "runtime",
+            "path": "lib/libserver.so",
+            "size": 171720,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/64/lib/libserver.so",
+            "hashes": {
+              "md5": "8333f5410976e3f550c9d1b71827e072",
+              "sha256": "2eeb9f13203c63738f07580a74474b6710e35f2661c5ad64f5ef4315ee3bfbf3"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "runtime",
+            "path": "lib/libclient.so",
+            "size": 175808,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/64/lib/libclient.so",
+            "hashes": {
+              "md5": "3a0277e097b6ca867de8ded1f3aa1c4a",
+              "sha256": "7b0b22d56d59f1ef9a5cf3aadf187f58e39cafad81517f0d5603ac3b009d10e3"
+            }
+          },
+          {
+            "filename": "export.h",
+            "category": "headers",
+            "path": "include/export.h",
+            "size": 642,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/64/include/export.h",
+            "hashes": {
+              "md5": "0033188112cadff5e894e1cc4dcc438f",
+              "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
+            }
+          }
+        ],
+        "count": 5
       },
-      {
-        "filename": "libclient.so",
-        "path": "lib/libclient.so",
-        "size": 228812,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/armv7/lib/libclient.so",
-        "hashes": {
-          "md5": "5da94bb02a3af8e5a1df9a0a5b051b8a",
-          "sha256": "2c4a69c48bd3d83a61697729817443bb747f657046f930a9389035c11c3fb39f"
-        }
-      },
-      {
-        "filename": "export.h",
-        "path": "include/export.h",
-        "size": 642,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/armv7/include/export.h",
-        "hashes": {
-          "md5": "0033188112cadff5e894e1cc4dcc438f",
-          "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
-        }
+      "arm64": {
+        "files": [
+          {
+            "filename": "libserver.so",
+            "category": "c_development",
+            "path": "c_lib/libserver.so",
+            "size": 171720,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/arm64/c_lib/libserver.so",
+            "hashes": {
+              "md5": "8333f5410976e3f550c9d1b71827e072",
+              "sha256": "2eeb9f13203c63738f07580a74474b6710e35f2661c5ad64f5ef4315ee3bfbf3"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "c_development",
+            "path": "c_lib/libclient.so",
+            "size": 175808,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/arm64/c_lib/libclient.so",
+            "hashes": {
+              "md5": "3a0277e097b6ca867de8ded1f3aa1c4a",
+              "sha256": "7b0b22d56d59f1ef9a5cf3aadf187f58e39cafad81517f0d5603ac3b009d10e3"
+            }
+          },
+          {
+            "filename": "libserver.so",
+            "category": "runtime",
+            "path": "lib/libserver.so",
+            "size": 171720,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/arm64/lib/libserver.so",
+            "hashes": {
+              "md5": "8333f5410976e3f550c9d1b71827e072",
+              "sha256": "2eeb9f13203c63738f07580a74474b6710e35f2661c5ad64f5ef4315ee3bfbf3"
+            }
+          },
+          {
+            "filename": "libclient.so",
+            "category": "runtime",
+            "path": "lib/libclient.so",
+            "size": 175808,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/arm64/lib/libclient.so",
+            "hashes": {
+              "md5": "3a0277e097b6ca867de8ded1f3aa1c4a",
+              "sha256": "7b0b22d56d59f1ef9a5cf3aadf187f58e39cafad81517f0d5603ac3b009d10e3"
+            }
+          },
+          {
+            "filename": "export.h",
+            "category": "headers",
+            "path": "include/export.h",
+            "size": 642,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/arm64/include/export.h",
+            "hashes": {
+              "md5": "0033188112cadff5e894e1cc4dcc438f",
+              "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
+            }
+          }
+        ],
+        "count": 5
       }
-    ],
-    "android/x86": [
-      {
-        "filename": "libserver.so",
-        "path": "lib/libserver.so",
-        "size": 198216,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86/lib/libserver.so",
-        "hashes": {
-          "md5": "4ea89b3a40f58e96aab2826b69c12475",
-          "sha256": "dfcb396f3a89434c01bd354c4d30d5889834e313c7caf6d31a788275d446f86f"
-        }
+    },
+    "macos": {
+      "64": {
+        "files": [
+          {
+            "filename": "libserver.dylib",
+            "category": "c_development",
+            "path": "c_lib/libserver.dylib",
+            "size": 221568,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/64/c_lib/libserver.dylib",
+            "hashes": {
+              "md5": "802772c1ed3dede9dd88c4795e2ab6ed",
+              "sha256": "da1c30f0bee46a9fcecb64f7b31f7bea3fc36980775669e7855f990019f1a9c2"
+            }
+          },
+          {
+            "filename": "libclient.dylib",
+            "category": "c_development",
+            "path": "c_lib/libclient.dylib",
+            "size": 221576,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/64/c_lib/libclient.dylib",
+            "hashes": {
+              "md5": "432e53022fe793e09ffc87875bc1094c",
+              "sha256": "3c84d3d0d78f6c1eb34d92b74c1eed364126c77648143297ba7265996a531459"
+            }
+          },
+          {
+            "filename": "libserver.dylib",
+            "category": "runtime",
+            "path": "lib/libserver.dylib",
+            "size": 221568,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/64/lib/libserver.dylib",
+            "hashes": {
+              "md5": "802772c1ed3dede9dd88c4795e2ab6ed",
+              "sha256": "da1c30f0bee46a9fcecb64f7b31f7bea3fc36980775669e7855f990019f1a9c2"
+            }
+          },
+          {
+            "filename": "libclient.dylib",
+            "category": "runtime",
+            "path": "lib/libclient.dylib",
+            "size": 221576,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/64/lib/libclient.dylib",
+            "hashes": {
+              "md5": "432e53022fe793e09ffc87875bc1094c",
+              "sha256": "3c84d3d0d78f6c1eb34d92b74c1eed364126c77648143297ba7265996a531459"
+            }
+          },
+          {
+            "filename": "export.h",
+            "category": "headers",
+            "path": "include/export.h",
+            "size": 642,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/64/include/export.h",
+            "hashes": {
+              "md5": "0033188112cadff5e894e1cc4dcc438f",
+              "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
+            }
+          }
+        ],
+        "count": 5
       },
-      {
-        "filename": "libclient.so",
-        "path": "lib/libclient.so",
-        "size": 198732,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86/lib/libclient.so",
-        "hashes": {
-          "md5": "cd83d480fcad50203e27941506e19bc7",
-          "sha256": "d0a24ef5f9cf66ed2ab6560fb79e8ff68a4c0763b4fdc09d5baeefef2fae820b"
-        }
-      },
-      {
-        "filename": "export.h",
-        "path": "include/export.h",
-        "size": 642,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86/include/export.h",
-        "hashes": {
-          "md5": "0033188112cadff5e894e1cc4dcc438f",
-          "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
-        }
+      "arm64": {
+        "files": [
+          {
+            "filename": "libserver.dylib",
+            "category": "c_development",
+            "path": "c_lib/libserver.dylib",
+            "size": 239984,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/c_lib/libserver.dylib",
+            "hashes": {
+              "md5": "9cbe51bb6b58a0b1de4b32c67700b158",
+              "sha256": "af2d615a8ed45aea111ee98a28778bbdbfd88db286205cea82f19a0a9c95028e"
+            }
+          },
+          {
+            "filename": "libclient.dylib",
+            "category": "c_development",
+            "path": "c_lib/libclient.dylib",
+            "size": 239984,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/c_lib/libclient.dylib",
+            "hashes": {
+              "md5": "4b62c220207ee5f301948e8d1d82ac04",
+              "sha256": "0f2fad074e62969636669fc7c755ccaa8772a555418b63a7167e71d216ecb752"
+            }
+          },
+          {
+            "filename": "libserver.dylib",
+            "category": "runtime",
+            "path": "lib/libserver.dylib",
+            "size": 239984,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/lib/libserver.dylib",
+            "hashes": {
+              "md5": "9cbe51bb6b58a0b1de4b32c67700b158",
+              "sha256": "af2d615a8ed45aea111ee98a28778bbdbfd88db286205cea82f19a0a9c95028e"
+            }
+          },
+          {
+            "filename": "libclient.dylib",
+            "category": "runtime",
+            "path": "lib/libclient.dylib",
+            "size": 239984,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/lib/libclient.dylib",
+            "hashes": {
+              "md5": "4b62c220207ee5f301948e8d1d82ac04",
+              "sha256": "0f2fad074e62969636669fc7c755ccaa8772a555418b63a7167e71d216ecb752"
+            }
+          },
+          {
+            "filename": "export.h",
+            "category": "headers",
+            "path": "include/export.h",
+            "size": 642,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/include/export.h",
+            "hashes": {
+              "md5": "0033188112cadff5e894e1cc4dcc438f",
+              "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
+            }
+          }
+        ],
+        "count": 5
       }
-    ],
-    "android/x86_64": [
-      {
-        "filename": "libserver.so",
-        "path": "lib/libserver.so",
-        "size": 185216,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/lib/libserver.so",
-        "hashes": {
-          "md5": "5c9f740ef493854a351f1f33f9139bdd",
-          "sha256": "d300561967c007436a53bf548b1265735331d033f8b74b52efe71bdb6cc6e31f"
-        }
-      },
-      {
-        "filename": "libclient.so",
-        "path": "lib/libclient.so",
-        "size": 185848,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/lib/libclient.so",
-        "hashes": {
-          "md5": "42d883b751bcd8cea0f51d1f0ca74234",
-          "sha256": "4ce5b8d870974fe659dd1bd01e2976fd4e76fbaa552325d2f629c848b8343ac3"
-        }
-      },
-      {
-        "filename": "export.h",
-        "path": "include/export.h",
-        "size": 642,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/include/export.h",
-        "hashes": {
-          "md5": "0033188112cadff5e894e1cc4dcc438f",
-          "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
-        }
+    },
+    "wasm": {
+      "wasm": {
+        "files": [
+          {
+            "filename": "export.h",
+            "category": "headers",
+            "path": "include/export.h",
+            "size": 642,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/include/export.h",
+            "hashes": {
+              "md5": "0033188112cadff5e894e1cc4dcc438f",
+              "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
+            }
+          },
+          {
+            "filename": "client.js",
+            "category": "javascript",
+            "path": "js/client.js",
+            "size": 14205,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/client.js",
+            "hashes": {
+              "md5": "7c7a9cf2cb65acd9d9edc9c436c04412",
+              "sha256": "c051a24398bccd7d84b3b6498f0a5bc595207616f6d92a6afcdb8b7a95da7951"
+            }
+          },
+          {
+            "filename": "server.js",
+            "category": "javascript",
+            "path": "js/server.js",
+            "size": 14165,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/server.js",
+            "hashes": {
+              "md5": "f40906446927476108e09cfef54384a5",
+              "sha256": "7c2c4c698e510d6044669618b2c35a2f9950e395c3b0f177c061ea08b759f021"
+            }
+          },
+          {
+            "filename": "server.wasm",
+            "category": "runtime",
+            "path": "js/server.wasm",
+            "size": 99152,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/server.wasm",
+            "hashes": {
+              "md5": "f7d7c9b966f21768844a80ca8384748a",
+              "sha256": "e2d6e1fdfa3accf6f489f5587a3d7705ac373c4ccdf81ba6f0beb5d37dc56b1d"
+            }
+          },
+          {
+            "filename": "client.wasm",
+            "category": "runtime",
+            "path": "js/client.wasm",
+            "size": 99897,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/client.wasm",
+            "hashes": {
+              "md5": "287d0f4bc07c5f19c2a7c7a081ef772a",
+              "sha256": "2a9bffc579db89d8b54e639ae424e0f951b712b3875d59d8588d747735d8fbbb"
+            }
+          }
+        ],
+        "count": 5
       }
-    ],
-    "linux/64": [
-      {
-        "filename": "libserver.so",
-        "path": "lib/libserver.so",
-        "size": 171720,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/64/lib/libserver.so",
-        "hashes": {
-          "md5": "8333f5410976e3f550c9d1b71827e072",
-          "sha256": "2eeb9f13203c63738f07580a74474b6710e35f2661c5ad64f5ef4315ee3bfbf3"
-        }
-      },
-      {
-        "filename": "libclient.so",
-        "path": "lib/libclient.so",
-        "size": 175808,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/64/lib/libclient.so",
-        "hashes": {
-          "md5": "3a0277e097b6ca867de8ded1f3aa1c4a",
-          "sha256": "7b0b22d56d59f1ef9a5cf3aadf187f58e39cafad81517f0d5603ac3b009d10e3"
-        }
-      },
-      {
-        "filename": "export.h",
-        "path": "include/export.h",
-        "size": 642,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/64/include/export.h",
-        "hashes": {
-          "md5": "0033188112cadff5e894e1cc4dcc438f",
-          "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
-        }
-      }
-    ],
-    "linux/arm64": [
-      {
-        "filename": "libserver.so",
-        "path": "lib/libserver.so",
-        "size": 171720,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/arm64/lib/libserver.so",
-        "hashes": {
-          "md5": "8333f5410976e3f550c9d1b71827e072",
-          "sha256": "2eeb9f13203c63738f07580a74474b6710e35f2661c5ad64f5ef4315ee3bfbf3"
-        }
-      },
-      {
-        "filename": "libclient.so",
-        "path": "lib/libclient.so",
-        "size": 175808,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/arm64/lib/libclient.so",
-        "hashes": {
-          "md5": "3a0277e097b6ca867de8ded1f3aa1c4a",
-          "sha256": "7b0b22d56d59f1ef9a5cf3aadf187f58e39cafad81517f0d5603ac3b009d10e3"
-        }
-      },
-      {
-        "filename": "export.h",
-        "path": "include/export.h",
-        "size": 642,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/arm64/include/export.h",
-        "hashes": {
-          "md5": "0033188112cadff5e894e1cc4dcc438f",
-          "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
-        }
-      }
-    ],
-    "macos/64": [
-      {
-        "filename": "libserver.dylib",
-        "path": "lib/libserver.dylib",
-        "size": 221568,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/64/lib/libserver.dylib",
-        "hashes": {
-          "md5": "802772c1ed3dede9dd88c4795e2ab6ed",
-          "sha256": "da1c30f0bee46a9fcecb64f7b31f7bea3fc36980775669e7855f990019f1a9c2"
-        }
-      },
-      {
-        "filename": "libclient.dylib",
-        "path": "lib/libclient.dylib",
-        "size": 221576,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/64/lib/libclient.dylib",
-        "hashes": {
-          "md5": "432e53022fe793e09ffc87875bc1094c",
-          "sha256": "3c84d3d0d78f6c1eb34d92b74c1eed364126c77648143297ba7265996a531459"
-        }
-      },
-      {
-        "filename": "export.h",
-        "path": "include/export.h",
-        "size": 642,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/64/include/export.h",
-        "hashes": {
-          "md5": "0033188112cadff5e894e1cc4dcc438f",
-          "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
-        }
-      }
-    ],
-    "macos/arm64": [
-      {
-        "filename": "libserver.dylib",
-        "path": "lib/libserver.dylib",
-        "size": 239984,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/lib/libserver.dylib",
-        "hashes": {
-          "md5": "9cbe51bb6b58a0b1de4b32c67700b158",
-          "sha256": "af2d615a8ed45aea111ee98a28778bbdbfd88db286205cea82f19a0a9c95028e"
-        }
-      },
-      {
-        "filename": "libclient.dylib",
-        "path": "lib/libclient.dylib",
-        "size": 239984,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/lib/libclient.dylib",
-        "hashes": {
-          "md5": "4b62c220207ee5f301948e8d1d82ac04",
-          "sha256": "0f2fad074e62969636669fc7c755ccaa8772a555418b63a7167e71d216ecb752"
-        }
-      },
-      {
-        "filename": "export.h",
-        "path": "include/export.h",
-        "size": 642,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/include/export.h",
-        "hashes": {
-          "md5": "0033188112cadff5e894e1cc4dcc438f",
-          "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
-        }
-      }
-    ],
-    "wasm/wasm": [
-      {
-        "filename": "export.h",
-        "path": "include/export.h",
-        "size": 642,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/include/export.h",
-        "hashes": {
-          "md5": "0033188112cadff5e894e1cc4dcc438f",
-          "sha256": "0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1"
-        }
-      },
-      {
-        "filename": "client.js",
-        "path": "js/client.js",
-        "size": 14205,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/client.js",
-        "hashes": {
-          "md5": "7c7a9cf2cb65acd9d9edc9c436c04412",
-          "sha256": "c051a24398bccd7d84b3b6498f0a5bc595207616f6d92a6afcdb8b7a95da7951"
-        }
-      },
-      {
-        "filename": "server.js",
-        "path": "js/server.js",
-        "size": 14165,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/server.js",
-        "hashes": {
-          "md5": "f40906446927476108e09cfef54384a5",
-          "sha256": "7c2c4c698e510d6044669618b2c35a2f9950e395c3b0f177c061ea08b759f021"
-        }
-      },
-      {
-        "filename": "server.wasm",
-        "path": "js/server.wasm",
-        "size": 99152,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/server.wasm",
-        "hashes": {
-          "md5": "f7d7c9b966f21768844a80ca8384748a",
-          "sha256": "e2d6e1fdfa3accf6f489f5587a3d7705ac373c4ccdf81ba6f0beb5d37dc56b1d"
-        }
-      },
-      {
-        "filename": "client.wasm",
-        "path": "js/client.wasm",
-        "size": 99897,
-        "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/client.wasm",
-        "hashes": {
-          "md5": "287d0f4bc07c5f19c2a7c7a081ef772a",
-          "sha256": "2a9bffc579db89d8b54e639ae424e0f951b712b3875d59d8588d747735d8fbbb"
-        }
-      }
-    ]
+    }
   }
 }

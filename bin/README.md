@@ -1,7 +1,7 @@
 # Proof-of-Work Binaries
 
 **Repository**: [QudsLab/Proof-of-work](https://github.com/QudsLab/Proof-of-work)
-**Generated**: 2025-12-06 19:08 UTC
+**Generated**: 2025-12-06 19:17 UTC
 
 This directory contains pre-built binaries for multiple platforms.
 
@@ -9,14 +9,14 @@ This directory contains pre-built binaries for multiple platforms.
 
 | Platform | Variant | Files |
 |----------|---------|-------|
-| Linux | 64 | 3 |
-| Linux | arm64 | 3 |
-| Macos | 64 | 3 |
-| Macos | arm64 | 3 |
-| Android | arm64 | 3 |
-| Android | armv7 | 3 |
-| Android | x86 | 3 |
-| Android | x86_64 | 3 |
+| Linux | 64 | 5 |
+| Linux | arm64 | 5 |
+| Macos | 64 | 5 |
+| Macos | arm64 | 5 |
+| Android | arm64 | 5 |
+| Android | armv7 | 5 |
+| Android | x86 | 5 |
+| Android | x86_64 | 5 |
 | Wasm | wasm | 5 |
 
 ## Download Links & Checksums
@@ -24,6 +24,14 @@ This directory contains pre-built binaries for multiple platforms.
 ### Linux
 
 #### 64
+
+- **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/64/c_lib/libserver.so)** (171,720 bytes)
+  - SHA256: `2eeb9f13203c63738f07580a74474b6710e35f2661c5ad64f5ef4315ee3bfbf3`
+  - MD5: `8333f5410976e3f550c9d1b71827e072`
+
+- **[libclient.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/64/c_lib/libclient.so)** (175,808 bytes)
+  - SHA256: `7b0b22d56d59f1ef9a5cf3aadf187f58e39cafad81517f0d5603ac3b009d10e3`
+  - MD5: `3a0277e097b6ca867de8ded1f3aa1c4a`
 
 - **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/64/lib/libserver.so)** (171,720 bytes)
   - SHA256: `2eeb9f13203c63738f07580a74474b6710e35f2661c5ad64f5ef4315ee3bfbf3`
@@ -38,6 +46,14 @@ This directory contains pre-built binaries for multiple platforms.
   - MD5: `0033188112cadff5e894e1cc4dcc438f`
 
 #### arm64
+
+- **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/arm64/c_lib/libserver.so)** (171,720 bytes)
+  - SHA256: `2eeb9f13203c63738f07580a74474b6710e35f2661c5ad64f5ef4315ee3bfbf3`
+  - MD5: `8333f5410976e3f550c9d1b71827e072`
+
+- **[libclient.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/arm64/c_lib/libclient.so)** (175,808 bytes)
+  - SHA256: `7b0b22d56d59f1ef9a5cf3aadf187f58e39cafad81517f0d5603ac3b009d10e3`
+  - MD5: `3a0277e097b6ca867de8ded1f3aa1c4a`
 
 - **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/linux/arm64/lib/libserver.so)** (171,720 bytes)
   - SHA256: `2eeb9f13203c63738f07580a74474b6710e35f2661c5ad64f5ef4315ee3bfbf3`
@@ -55,6 +71,14 @@ This directory contains pre-built binaries for multiple platforms.
 
 #### 64
 
+- **[libserver.dylib](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/64/c_lib/libserver.dylib)** (221,568 bytes)
+  - SHA256: `da1c30f0bee46a9fcecb64f7b31f7bea3fc36980775669e7855f990019f1a9c2`
+  - MD5: `802772c1ed3dede9dd88c4795e2ab6ed`
+
+- **[libclient.dylib](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/64/c_lib/libclient.dylib)** (221,576 bytes)
+  - SHA256: `3c84d3d0d78f6c1eb34d92b74c1eed364126c77648143297ba7265996a531459`
+  - MD5: `432e53022fe793e09ffc87875bc1094c`
+
 - **[libserver.dylib](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/64/lib/libserver.dylib)** (221,568 bytes)
   - SHA256: `da1c30f0bee46a9fcecb64f7b31f7bea3fc36980775669e7855f990019f1a9c2`
   - MD5: `802772c1ed3dede9dd88c4795e2ab6ed`
@@ -68,6 +92,14 @@ This directory contains pre-built binaries for multiple platforms.
   - MD5: `0033188112cadff5e894e1cc4dcc438f`
 
 #### arm64
+
+- **[libserver.dylib](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/c_lib/libserver.dylib)** (239,984 bytes)
+  - SHA256: `af2d615a8ed45aea111ee98a28778bbdbfd88db286205cea82f19a0a9c95028e`
+  - MD5: `9cbe51bb6b58a0b1de4b32c67700b158`
+
+- **[libclient.dylib](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/c_lib/libclient.dylib)** (239,984 bytes)
+  - SHA256: `0f2fad074e62969636669fc7c755ccaa8772a555418b63a7167e71d216ecb752`
+  - MD5: `4b62c220207ee5f301948e8d1d82ac04`
 
 - **[libserver.dylib](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/lib/libserver.dylib)** (239,984 bytes)
   - SHA256: `af2d615a8ed45aea111ee98a28778bbdbfd88db286205cea82f19a0a9c95028e`
@@ -85,6 +117,14 @@ This directory contains pre-built binaries for multiple platforms.
 
 #### arm64
 
+- **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/arm64/c_lib/libserver.so)** (215,792 bytes)
+  - SHA256: `862dc00817edd0ea6e3cd46ef81a11a6fde420cfbb134125bce77d8da6e8f287`
+  - MD5: `3da6a58715462a3ea5328fb2776ec0d1`
+
+- **[libclient.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/arm64/c_lib/libclient.so)** (216,288 bytes)
+  - SHA256: `368cc5563374fb7622f7d4c912ae307f96e61f3b688799fc8fdf7c60c093f74a`
+  - MD5: `ca32c0cc7056c958f4b4a78634864d4c`
+
 - **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/arm64/lib/libserver.so)** (215,792 bytes)
   - SHA256: `862dc00817edd0ea6e3cd46ef81a11a6fde420cfbb134125bce77d8da6e8f287`
   - MD5: `3da6a58715462a3ea5328fb2776ec0d1`
@@ -98,6 +138,14 @@ This directory contains pre-built binaries for multiple platforms.
   - MD5: `0033188112cadff5e894e1cc4dcc438f`
 
 #### armv7
+
+- **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/armv7/c_lib/libserver.so)** (228,360 bytes)
+  - SHA256: `e1ee472f2f8b5b083b62b79b467f7623d6d4d5c86fb204377e53fb68b836ecfd`
+  - MD5: `a570b2e934e3b4e3da7007f1181f690d`
+
+- **[libclient.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/armv7/c_lib/libclient.so)** (228,812 bytes)
+  - SHA256: `2c4a69c48bd3d83a61697729817443bb747f657046f930a9389035c11c3fb39f`
+  - MD5: `5da94bb02a3af8e5a1df9a0a5b051b8a`
 
 - **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/armv7/lib/libserver.so)** (228,360 bytes)
   - SHA256: `e1ee472f2f8b5b083b62b79b467f7623d6d4d5c86fb204377e53fb68b836ecfd`
@@ -113,6 +161,14 @@ This directory contains pre-built binaries for multiple platforms.
 
 #### x86
 
+- **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86/c_lib/libserver.so)** (198,216 bytes)
+  - SHA256: `dfcb396f3a89434c01bd354c4d30d5889834e313c7caf6d31a788275d446f86f`
+  - MD5: `4ea89b3a40f58e96aab2826b69c12475`
+
+- **[libclient.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86/c_lib/libclient.so)** (198,732 bytes)
+  - SHA256: `d0a24ef5f9cf66ed2ab6560fb79e8ff68a4c0763b4fdc09d5baeefef2fae820b`
+  - MD5: `cd83d480fcad50203e27941506e19bc7`
+
 - **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86/lib/libserver.so)** (198,216 bytes)
   - SHA256: `dfcb396f3a89434c01bd354c4d30d5889834e313c7caf6d31a788275d446f86f`
   - MD5: `4ea89b3a40f58e96aab2826b69c12475`
@@ -126,6 +182,14 @@ This directory contains pre-built binaries for multiple platforms.
   - MD5: `0033188112cadff5e894e1cc4dcc438f`
 
 #### x86_64
+
+- **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/c_lib/libserver.so)** (185,216 bytes)
+  - SHA256: `d300561967c007436a53bf548b1265735331d033f8b74b52efe71bdb6cc6e31f`
+  - MD5: `5c9f740ef493854a351f1f33f9139bdd`
+
+- **[libclient.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/c_lib/libclient.so)** (185,848 bytes)
+  - SHA256: `4ce5b8d870974fe659dd1bd01e2976fd4e76fbaa552325d2f629c848b8343ac3`
+  - MD5: `42d883b751bcd8cea0f51d1f0ca74234`
 
 - **[libserver.so](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/lib/libserver.so)** (185,216 bytes)
   - SHA256: `d300561967c007436a53bf548b1265735331d033f8b74b52efe71bdb6cc6e31f`
