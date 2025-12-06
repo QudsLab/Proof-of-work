@@ -29,7 +29,18 @@ class PoWServer:
         if not os.path.exists(dll_path):
             raise FileNotFoundError(f"Server DLL not found at {dll_path}")
         
-        self.server = ctypes.CDLL(dll_path)
+        try:
+            self.server = ctypes.CDLL(dll_path)
+        except OSError as e:
+            raise OSError(
+                f"Failed to load Server DLL from {dll_path}\n"
+                f"Error: {e}\n"
+                f"Possible causes:\n"
+                f"  - DLL is corrupted or not compiled\n"
+                f"  - Architecture mismatch (32-bit vs 64-bit)\n"
+                f"  - Missing dependencies\n"
+                f"  - File is not a valid Windows DLL"
+            ) from e
         
         # Setup function signatures for single hash verification
         self.server.verify_pow_single.argtypes = [
@@ -140,7 +151,18 @@ class PoWServer:
 
 # Example usage
 if __name__ == "__main__":
-    server = PoWServer()
+    # Get the DLL path (same logic as main.py)
+    from pathlib import Path
+    BASE_DIR = Path(__file__).parent.parent
+    BIN_PATH = BASE_DIR / "bin" / "win" / "64" / "dll"
+    SERVER_DLL = str(BIN_PATH / "server.dll")
+    
+    try:
+        server = PoWServer(SERVER_DLL)
+    except (FileNotFoundError, OSError) as e:
+        print(f"ERROR: {e}")
+        import sys
+        sys.exit(1)
     
     # Example single hash verification
     print("=" * 60)
