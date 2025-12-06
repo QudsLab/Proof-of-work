@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "repository": "https://github.com/QudsLab/Proof-of-work",
-  "generated": "2025-12-06T19:17:53.362269Z",
+  "generated": "2025-12-06T19:24:50.557830Z",
   "platforms": {
     "android": {
       "arm64": {
@@ -545,6 +545,68 @@
             "hashes": {
               "md5": "287d0f4bc07c5f19c2a7c7a081ef772a",
               "sha256": "2a9bffc579db89d8b54e639ae424e0f951b712b3875d59d8588d747735d8fbbb"
+            }
+          }
+        ],
+        "count": 5
+      }
+    },
+    "windows": {
+      "64": {
+        "files": [
+          {
+            "filename": "server.lib",
+            "category": "c_development",
+            "path": "c_lib/server.lib",
+            "size": 2878,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/c_lib/server.lib",
+            "hashes": {
+              "md5": "cc2f694261c392cecb40b451cc9c7504",
+              "sha256": "ec92bbcf53fcbb9addb6965b9460c77ffc31c2136888ed156597378b80fb9548"
+            }
+          },
+          {
+            "filename": "client.lib",
+            "category": "c_development",
+            "path": "c_lib/client.lib",
+            "size": 2902,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/c_lib/client.lib",
+            "hashes": {
+              "md5": "92c34350a391e66c093de08310a542ef",
+              "sha256": "66c1b8c54d195ad21102f86b3495d2890932402301fccedfc66f8ab6654807d5"
+            }
+          },
+          {
+            "filename": "server.dll",
+            "category": "runtime",
+            "path": "lib/server.dll",
+            "size": 187442,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/lib/server.dll",
+            "hashes": {
+              "md5": "abf4576f0d6296a3fb0cf88b0c63c369",
+              "sha256": "f6c3d401d3ef8f214e0c7bd037418a5f819c1f6412b48ae5b3f2f8d274de2fc8"
+            }
+          },
+          {
+            "filename": "client.dll",
+            "category": "runtime",
+            "path": "lib/client.dll",
+            "size": 187958,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/lib/client.dll",
+            "hashes": {
+              "md5": "511dd541df774e6f57c89f5fd946817f",
+              "sha256": "d6eb9ae0cd875c5bac1acc0af8dba838ac0d3a0eb6d2106404bd884d9c55e344"
+            }
+          },
+          {
+            "filename": "export.h",
+            "category": "headers",
+            "path": "include/export.h",
+            "size": 674,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/include/export.h",
+            "hashes": {
+              "md5": "b98905b1c93b869213da40b4bcf11153",
+              "sha256": "e66235dbec9b7d075be8ce58d6eedb732b2eac74f9f475f28baf0e0bbb14c9ac"
             }
           }
         ],
