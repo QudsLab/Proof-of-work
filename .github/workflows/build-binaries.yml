@@ -29,7 +29,7 @@ jobs:
           python-version: '3.11'
       - run: choco install mingw -y --no-progress
       - run: gcc --version
-      - run: .\build_win64.ps1
+      - run: .\build_win64.ps1 -Variant ${{ matrix.variant }}
         shell: pwsh
       - run: |
           if (!(Test-Path ".\bin\win\${{ matrix.variant }}\lib\client.dll")) { exit 1 }
