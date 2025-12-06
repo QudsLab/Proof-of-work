@@ -18,17 +18,16 @@ BASE_DIR = Path(__file__).parent.parent
 
 # get system arg for dll paths os and variant only
 # take one arg for os type one for variant
-OS_TYPE = "win"
+OS__TYPE = "win"
 VARIANT = "64"
 if len(sys.argv) > 1:
-    OS_TYPE = sys.argv[1].lower()
+    OS__TYPE = sys.argv[1].lower()
     VARIANT = sys.argv[2].lower()
 
 # BIN_PATH = BASE_DIR / "bin" / "win" / "64" / "dll"
-BIN_PATH = BASE_DIR / "bin" / OS_TYPE / VARIANT / "dll"
-
-SERVER_DLL = BIN_PATH / "server.dll"
-CLIENT_DLL = BIN_PATH / "client.dll"
+BIN_PATH = BASE_DIR / "bin" / OS__TYPE / VARIANT / "dll"
+SERVER_DLL = str(BIN_PATH / "server.dll")
+CLIENT_DLL = str(BIN_PATH / "client.dll")
 
 print("=" * 80)
 print("Enhanced Proof-of-Work Test Suite")
@@ -36,10 +35,18 @@ print("=" * 80)
 print(f"\nINPUT TEXT: {TEST_TEXT.decode()}")
 print(f"DIFFICULTY: {DIFFICULTY/4} hex digits ({DIFFICULTY} bits of leading zeros)")
 print(f"MAX NONCE:  {MAX_NONCE}")
+print(f"\nDLL Paths:")
+print(f"  Client: {CLIENT_DLL}")
+print(f"  Server: {SERVER_DLL}")
 
 # Initialize client and server
-client = PoWClient(dll_path=CLIENT_DLL)
-server = PoWServer(dll_path=SERVER_DLL)
+try:
+    client = PoWClient(dll_path=CLIENT_DLL)
+    server = PoWServer(dll_path=SERVER_DLL)
+except (FileNotFoundError, OSError) as e:
+    print(f"\nERROR: Failed to load DLL files")
+    print(f"{e}")
+    sys.exit(1)
 
 # ============================================================================
 # PART 1: Single Hash Algorithm Tests

@@ -62,7 +62,18 @@ class PoWClient:
         if not os.path.exists(dll_path):
             raise FileNotFoundError(f"Client DLL not found at {dll_path}")
         
-        self.client = ctypes.CDLL(dll_path)
+        try:
+            self.client = ctypes.CDLL(dll_path)
+        except OSError as e:
+            raise OSError(
+                f"Failed to load Client DLL from {dll_path}\n"
+                f"Error: {e}\n"
+                f"Possible causes:\n"
+                f"  - DLL is corrupted or not compiled\n"
+                f"  - Architecture mismatch (32-bit vs 64-bit)\n"
+                f"  - Missing dependencies\n"
+                f"  - File is not a valid Windows DLL"
+            ) from e
         
         # Setup function signatures for single hash
         self.client.generate_pow_single.argtypes = [
@@ -199,7 +210,18 @@ def create_multi_pow_challenge(algo_count, difficulty=12):
 
 # Example usage
 if __name__ == "__main__":
-    client = PoWClient()
+    # Get the DLL path (same logic as main.py)
+    from pathlib import Path
+    BASE_DIR = Path(__file__).parent.parent
+    BIN_PATH = BASE_DIR / "bin" / "win" / "64" / "dll"
+    CLIENT_DLL = str(BIN_PATH / "client.dll")
+    
+    try:
+        client = PoWClient(CLIENT_DLL)
+    except (FileNotFoundError, OSError) as e:
+        print(f"ERROR: {e}")
+        import sys
+        sys.exit(1)
     
     # Single hash example
     print("=" * 60)
