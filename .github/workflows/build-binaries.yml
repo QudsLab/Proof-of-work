@@ -57,11 +57,13 @@ jobs:
       - run: |
           sudo apt-get update
           sudo apt-get install -y build-essential
-          mkdir -p bin/linux/${{ matrix.variant }}/lib bin/linux/${{ matrix.variant }}/include
+          mkdir -p bin/linux/${{ matrix.variant }}/lib bin/linux/${{ matrix.variant }}/c_lib bin/linux/${{ matrix.variant }}/include
           HASH_SOURCES=$(find src/crypto -name "*.c" ! -name "main.c" | tr '\n' ' ')
           INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
           gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/lib/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
           gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/lib/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          cp bin/linux/${{ matrix.variant }}/lib/libclient.so bin/linux/${{ matrix.variant }}/c_lib/
+          cp bin/linux/${{ matrix.variant }}/lib/libserver.so bin/linux/${{ matrix.variant }}/c_lib/
           cp src/export.h bin/linux/${{ matrix.variant }}/include/
           [ -f "bin/linux/${{ matrix.variant }}/lib/libclient.so" ] || exit 1
           [ -f "bin/linux/${{ matrix.variant }}/lib/libserver.so" ] || exit 1
@@ -87,11 +89,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          mkdir -p bin/macos/${{ matrix.variant }}/lib bin/macos/${{ matrix.variant }}/include
+          mkdir -p bin/macos/${{ matrix.variant }}/lib bin/macos/${{ matrix.variant }}/c_lib bin/macos/${{ matrix.variant }}/include
           HASH_SOURCES=$(find src/crypto -name "*.c" ! -name "main.c" | tr '\n' ' ')
           INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
           gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/lib/libclient.dylib src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
           gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/lib/libserver.dylib src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          cp bin/macos/${{ matrix.variant }}/lib/libclient.dylib bin/macos/${{ matrix.variant }}/c_lib/
+          cp bin/macos/${{ matrix.variant }}/lib/libserver.dylib bin/macos/${{ matrix.variant }}/c_lib/
           cp src/export.h bin/macos/${{ matrix.variant }}/include/
           [ -f "bin/macos/${{ matrix.variant }}/lib/libclient.dylib" ] || exit 1
       - uses: actions/upload-artifact@v4
@@ -121,7 +125,7 @@ jobs:
         with:
           ndk-version: r25c
       - run: |
-          mkdir -p bin/android/${{ matrix.variant }}/lib bin/android/${{ matrix.variant }}/include
+          mkdir -p bin/android/${{ matrix.variant }}/lib bin/android/${{ matrix.variant }}/c_lib bin/android/${{ matrix.variant }}/include
           NDK=$ANDROID_NDK_ROOT
           TC=$NDK/toolchains/llvm/prebuilt/linux-x86_64
           CC_CMD=$TC/bin
@@ -135,6 +139,8 @@ jobs:
           INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
           $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/lib/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
           $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/lib/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          cp bin/android/${{ matrix.variant }}/lib/libclient.so bin/android/${{ matrix.variant }}/c_lib/
+          cp bin/android/${{ matrix.variant }}/lib/libserver.so bin/android/${{ matrix.variant }}/c_lib/
           cp src/export.h bin/android/${{ matrix.variant }}/include/
           [ -f "bin/android/${{ matrix.variant }}/lib/libclient.so" ] || exit 1
       - uses: actions/upload-artifact@v4
