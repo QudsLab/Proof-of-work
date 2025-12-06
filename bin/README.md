@@ -1,7 +1,7 @@
 # Proof-of-Work Binaries
 
 **Repository**: [QudsLab/Proof-of-work](https://github.com/QudsLab/Proof-of-work)
-**Generated**: 2025-12-06 19:32 UTC
+**Generated**: 2025-12-06 19:56 UTC
 
 This directory contains pre-built binaries for multiple platforms.
 
@@ -28,20 +28,20 @@ This directory contains pre-built binaries for multiple platforms.
 #### 32
 
 - **[server.lib](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/c_lib/server.lib)** (2,878 bytes)
-  - SHA256: `7bcb8cbdd0a8955f921466a4631bf9fedfa48c842afb0e6cd2cba4e13343c6b1`
-  - MD5: `5a7719d883d5585581e4d108bd58fa52`
+  - SHA256: `a441be8685fb373322f1d63f8b008d59f7ee539ad20424c36f84afe582c00071`
+  - MD5: `4b3efda82b43aa2c064a63db2773bd25`
 
 - **[client.lib](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/c_lib/client.lib)** (2,902 bytes)
-  - SHA256: `e4b13e9590aad0c9fe5c138e8729e519cd426d255e05e19539829bce16d6ba0d`
-  - MD5: `515a241635c025b3e2589fe921d258c0`
+  - SHA256: `435b00d3e9810c546e7bd5a65154e8a13d6bf1e5e523bd62b9065eca84d9b6ee`
+  - MD5: `f66701da137efe0db1785a20284b80d7`
 
 - **[server.dll](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/lib/server.dll)** (187,442 bytes)
-  - SHA256: `24ec7214f6e647b6d5a8cf70c9a6bdd624a1c709bd6706656613cf383a9b4d2f`
-  - MD5: `cceb19bac150811ec21c9b8c54c24625`
+  - SHA256: `660765e85754f13e97f8a840825f66ce76e23de7f90e1a4309ea2f5e4505edfe`
+  - MD5: `1b9a773c5ebdd97b388443797e8321f0`
 
 - **[client.dll](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/lib/client.dll)** (187,958 bytes)
-  - SHA256: `bb29e053b953268a539f7906c016c8515fd478b396daed758de9f7c54c89b934`
-  - MD5: `4f41194de5889c6af77614aa472b3ffd`
+  - SHA256: `c00b9619826f2d47372592643fee91758b008e0515c2f3ee11cb60d6e0d34804`
+  - MD5: `6010421a2fee7a0ea7217c92478d53ab`
 
 - **[export.h](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/include/export.h)** (674 bytes)
   - SHA256: `e66235dbec9b7d075be8ce58d6eedb732b2eac74f9f475f28baf0e0bbb14c9ac`
@@ -50,20 +50,20 @@ This directory contains pre-built binaries for multiple platforms.
 #### 64
 
 - **[server.lib](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/c_lib/server.lib)** (2,878 bytes)
-  - SHA256: `e8bfcd3e8d4afaa2d4cf89b4a20601b794c7f71cbb3bded3456d7b3a022ace03`
-  - MD5: `bb1e112fe6caa1816a66985745822471`
+  - SHA256: `354a0b24b23411c5b38faa9d8ccab298022b687678863c55535a96facbbf5dd1`
+  - MD5: `c1d0d3904b249dc275ece0b9f416e597`
 
 - **[client.lib](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/c_lib/client.lib)** (2,902 bytes)
-  - SHA256: `a032b148416738cd02bacf298a604ba85a1f3cd6c0b5be4a42a69d1e4b6b8938`
-  - MD5: `934ba4f5fcde4fbede08cc0d39261ef1`
+  - SHA256: `a614f058749f6b42072777f5f0340421348a9b3447993a6e7f38d99333fecff6`
+  - MD5: `f158c917905e7c3f77bace559de98d31`
 
 - **[server.dll](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/lib/server.dll)** (187,442 bytes)
-  - SHA256: `75f0108258fc6d1fb15e9a437a50df04df003113ca86c3a37d4c93b4c9829cd5`
-  - MD5: `3df04326f73e07e201a44f893d058b2d`
+  - SHA256: `eba15c98a068bc110b47bf4a69de452d3c0932857ea9366822083b9ffc5d6bd9`
+  - MD5: `b1a1829d82b1f061e2ee8ad86ae558be`
 
 - **[client.dll](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/lib/client.dll)** (187,958 bytes)
-  - SHA256: `c27d78c4c961abb034961352e663d7d5372f338b92515bdf1c05a38cec2b01a4`
-  - MD5: `97639715e0e040c7b1e92f9585f5e2ad`
+  - SHA256: `de610596961dd79454d446d82e17fdffc7019685b6d13accfb0ec72a56d06141`
+  - MD5: `4d492eb574d3c4b9c3cbedecefa38240`
 
 - **[export.h](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/include/export.h)** (674 bytes)
   - SHA256: `e66235dbec9b7d075be8ce58d6eedb732b2eac74f9f475f28baf0e0bbb14c9ac`
