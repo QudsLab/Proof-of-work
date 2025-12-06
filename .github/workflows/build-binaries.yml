@@ -64,6 +64,7 @@ jobs:
           gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/lib/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
           cp src/export.h bin/linux/${{ matrix.variant }}/include/
           [ -f "bin/linux/${{ matrix.variant }}/lib/libclient.so" ] || exit 1
+          [ -f "bin/linux/${{ matrix.variant }}/lib/libserver.so" ] || exit 1
       - uses: actions/upload-artifact@v4
         with:
           name: binaries-linux-${{ matrix.arch }}
@@ -159,7 +160,7 @@ jobs:
             -s MODULARIZE=1 \
             -s EXPORT_NAME='ProofOfWorkClient' \
             -s ALLOW_MEMORY_GROWTH=1 \
-            -s EXPORTED_FUNCTIONS='["_pow_mine", "_malloc", "_free"]' \
+            -s EXPORTED_FUNCTIONS='["_generate_pow_single", "_generate_pow_multi", "_get_hash_algo_by_name", "_malloc", "_free"]' \
             -Isrc $INCLUDE_DIRS \
             -O3
           emcc src/server.c $HASH_SOURCES -o bin/wasm/js/server.js \
@@ -167,7 +168,7 @@ jobs:
             -s MODULARIZE=1 \
             -s EXPORT_NAME='ProofOfWorkServer' \
             -s ALLOW_MEMORY_GROWTH=1 \
-            -s EXPORTED_FUNCTIONS='["_pow_verify", "_malloc", "_free"]' \
+            -s EXPORTED_FUNCTIONS='["_verify_pow_single", "_verify_pow_multi", "_get_hash_algo_by_name", "_malloc", "_free"]' \
             -Isrc $INCLUDE_DIRS \
             -O3
           cp src/export.h bin/wasm/include/
@@ -194,8 +195,10 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - run: python python/main.py
+      - run: python python/main.py win 64
         shell: pwsh
+        env:
+          PYTHONIOENCODING: utf-8
 
   test_linux:
     name: Test Linux Binaries
@@ -207,7 +210,7 @@ jobs:
         with:
           name: binaries-linux-x86_64
           path: bin/linux/64/
-      - run: python3 python/main.py
+      - run: python3 python/main.py linux 64
 
   test_macos:
     name: Test macOS Binaries
@@ -219,7 +222,7 @@ jobs:
         with:
           name: binaries-macos-x86_64
           path: bin/macos/64/
-      - run: python3 python/main.py
+      - run: python3 python/main.py macos 64
 
   test_wasm:
     name: Test WebAssembly
