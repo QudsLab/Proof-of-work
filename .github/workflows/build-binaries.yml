@@ -44,18 +44,31 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Setup MinGW-w64 (GCC)
-      uses: egor-tensin/setup-mingw@v2
-      with:
-        cygwin: false
-        cc: yes
-        platform: ${{ matrix.arch }}
+    - name: Install GCC via Chocolatey
+      shell: pwsh
+      run: |
+        Write-Host "Installing MinGW-w64..." -ForegroundColor Green
+        choco install mingw --version=12.2.0 -y --no-progress
+        Write-Host "MinGW installation completed" -ForegroundColor Green
 
     - name: Verify GCC installation
       shell: pwsh
       run: |
+        Write-Host "Checking GCC installation..." -ForegroundColor Green
         gcc --version
         where gcc
+        if ($LASTEXITCODE -ne 0) {
+          Write-Host "GCC not found in PATH, searching..." -ForegroundColor Yellow
+          $gccPath = @(Get-ChildItem -Path "C:\tools\mingw*\bin\gcc.exe" -ErrorAction SilentlyContinue | Select-Object -First 1)
+          if ($gccPath) {
+            $gccDir = Split-Path $gccPath
+            $env:PATH = "$gccDir;$env:PATH"
+            Write-Host "Found GCC at: $gccPath" -ForegroundColor Green
+            gcc --version
+          } else {
+            Write-Host "WARNING: GCC not found, will attempt build anyway" -ForegroundColor Yellow
+          }
+        }
 
     - name: Build DLLs (${{ matrix.arch }})
       shell: pwsh
