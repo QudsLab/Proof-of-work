@@ -1,0 +1,347 @@
+[
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "PoWClient",
+        "importPath": "utils_client",
+        "description": "utils_client",
+        "isExtraImport": true,
+        "detail": "utils_client",
+        "documentation": {}
+    },
+    {
+        "label": "create_multi_pow_challenge",
+        "importPath": "utils_client",
+        "description": "utils_client",
+        "isExtraImport": true,
+        "detail": "utils_client",
+        "documentation": {}
+    },
+    {
+        "label": "PoWServer",
+        "importPath": "utils_server",
+        "description": "utils_server",
+        "isExtraImport": true,
+        "detail": "utils_server",
+        "documentation": {}
+    },
+    {
+        "label": "ctypes",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "ctypes",
+        "description": "ctypes",
+        "detail": "ctypes",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "hashlib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "hashlib",
+        "description": "hashlib",
+        "detail": "hashlib",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "TEST_TEXT",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "TEST_TEXT = b\"hello world\"\nDIFFICULTY = 12\nMAX_NONCE = 100000000\n# current directory paths\nBASE_DIR = Path(__file__).parent.parent\n# get system arg for dll paths os and variant only\n# take one arg for os type one for variant\nOS__TYPE = \"win\"\nVARIANT = \"64\"\nif len(sys.argv) > 1:",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "DIFFICULTY",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "DIFFICULTY = 12\nMAX_NONCE = 100000000\n# current directory paths\nBASE_DIR = Path(__file__).parent.parent\n# get system arg for dll paths os and variant only\n# take one arg for os type one for variant\nOS__TYPE = \"win\"\nVARIANT = \"64\"\nif len(sys.argv) > 1:\n    OS__TYPE = sys.argv[1].lower()",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "MAX_NONCE",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "MAX_NONCE = 100000000\n# current directory paths\nBASE_DIR = Path(__file__).parent.parent\n# get system arg for dll paths os and variant only\n# take one arg for os type one for variant\nOS__TYPE = \"win\"\nVARIANT = \"64\"\nif len(sys.argv) > 1:\n    OS__TYPE = sys.argv[1].lower()\n    VARIANT = sys.argv[2].lower()",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "BASE_DIR",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "BASE_DIR = Path(__file__).parent.parent\n# get system arg for dll paths os and variant only\n# take one arg for os type one for variant\nOS__TYPE = \"win\"\nVARIANT = \"64\"\nif len(sys.argv) > 1:\n    OS__TYPE = sys.argv[1].lower()\n    VARIANT = sys.argv[2].lower()\n# BIN_PATH = BASE_DIR / \"bin\" / \"win\" / \"64\" / \"dll\"\nBIN_PATH = BASE_DIR / \"bin\" / OS__TYPE / VARIANT / \"dll\"",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "OS__TYPE",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "OS__TYPE = \"win\"\nVARIANT = \"64\"\nif len(sys.argv) > 1:\n    OS__TYPE = sys.argv[1].lower()\n    VARIANT = sys.argv[2].lower()\n# BIN_PATH = BASE_DIR / \"bin\" / \"win\" / \"64\" / \"dll\"\nBIN_PATH = BASE_DIR / \"bin\" / OS__TYPE / VARIANT / \"dll\"\nSERVER_DLL = str(BIN_PATH / \"server.dll\")\nCLIENT_DLL = str(BIN_PATH / \"client.dll\")\nprint(\"=\" * 80)",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "VARIANT",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "VARIANT = \"64\"\nif len(sys.argv) > 1:\n    OS__TYPE = sys.argv[1].lower()\n    VARIANT = sys.argv[2].lower()\n# BIN_PATH = BASE_DIR / \"bin\" / \"win\" / \"64\" / \"dll\"\nBIN_PATH = BASE_DIR / \"bin\" / OS__TYPE / VARIANT / \"dll\"\nSERVER_DLL = str(BIN_PATH / \"server.dll\")\nCLIENT_DLL = str(BIN_PATH / \"client.dll\")\nprint(\"=\" * 80)\nprint(\"Enhanced Proof-of-Work Test Suite\")",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "BIN_PATH",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "BIN_PATH = BASE_DIR / \"bin\" / OS__TYPE / VARIANT / \"dll\"\nSERVER_DLL = str(BIN_PATH / \"server.dll\")\nCLIENT_DLL = str(BIN_PATH / \"client.dll\")\nprint(\"=\" * 80)\nprint(\"Enhanced Proof-of-Work Test Suite\")\nprint(\"=\" * 80)\nprint(f\"\\nINPUT TEXT: {TEST_TEXT.decode()}\")\nprint(f\"DIFFICULTY: {DIFFICULTY/4} hex digits ({DIFFICULTY} bits of leading zeros)\")\nprint(f\"MAX NONCE:  {MAX_NONCE}\")\nprint(f\"\\nDLL Paths:\")",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "SERVER_DLL",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "SERVER_DLL = str(BIN_PATH / \"server.dll\")\nCLIENT_DLL = str(BIN_PATH / \"client.dll\")\nprint(\"=\" * 80)\nprint(\"Enhanced Proof-of-Work Test Suite\")\nprint(\"=\" * 80)\nprint(f\"\\nINPUT TEXT: {TEST_TEXT.decode()}\")\nprint(f\"DIFFICULTY: {DIFFICULTY/4} hex digits ({DIFFICULTY} bits of leading zeros)\")\nprint(f\"MAX NONCE:  {MAX_NONCE}\")\nprint(f\"\\nDLL Paths:\")\nprint(f\"  Client: {CLIENT_DLL}\")",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "CLIENT_DLL",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "CLIENT_DLL = str(BIN_PATH / \"client.dll\")\nprint(\"=\" * 80)\nprint(\"Enhanced Proof-of-Work Test Suite\")\nprint(\"=\" * 80)\nprint(f\"\\nINPUT TEXT: {TEST_TEXT.decode()}\")\nprint(f\"DIFFICULTY: {DIFFICULTY/4} hex digits ({DIFFICULTY} bits of leading zeros)\")\nprint(f\"MAX NONCE:  {MAX_NONCE}\")\nprint(f\"\\nDLL Paths:\")\nprint(f\"  Client: {CLIENT_DLL}\")\nprint(f\"  Server: {SERVER_DLL}\")",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "single_tests",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "single_tests = [\n    \"MD4\",\n    \"MD5\", \n    \"SHA2-256\",\n    \"BLAKE2s-256\",\n    \"SHA3-256\"\n]\nfor algo in single_tests:\n    print(f\"\\n{algo}:\")\n    result = client.generate_single(TEST_TEXT, algo, DIFFICULTY, 0, MAX_NONCE)",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "algos_test1",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "algos_test1 = create_multi_pow_challenge(4, DIFFICULTY)\nprint(f\"Algorithms: {', '.join(algos_test1)}\")\nresult = client.generate_multi(TEST_TEXT, algos_test1, DIFFICULTY, 0, MAX_NONCE)\nif result['success']:\n    print(f\"Nonce found: {result['nonce']}\")\n    print(\"\\nHash outputs:\")\n    for i, algo in enumerate(result['algorithms']):\n        print(f\"  {algo:15} : {client.hash_to_hex(result['hashes'][i])}\")\n    # Verify\n    valid = server.verify_multi(TEST_TEXT, result['nonce'], algos_test1, DIFFICULTY)",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "result",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "result = client.generate_multi(TEST_TEXT, algos_test1, DIFFICULTY, 0, MAX_NONCE)\nif result['success']:\n    print(f\"Nonce found: {result['nonce']}\")\n    print(\"\\nHash outputs:\")\n    for i, algo in enumerate(result['algorithms']):\n        print(f\"  {algo:15} : {client.hash_to_hex(result['hashes'][i])}\")\n    # Verify\n    valid = server.verify_multi(TEST_TEXT, result['nonce'], algos_test1, DIFFICULTY)\n    print(f\"\\nVerification: {'✓ PASSED' if valid else '✗ FAILED'}\")\nelse:",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "algos_test2",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "algos_test2 = create_multi_pow_challenge(5, DIFFICULTY)\nprint(f\"Algorithms: {', '.join(algos_test2)}\")\nresult = client.generate_multi(TEST_TEXT, algos_test2, DIFFICULTY, 0, MAX_NONCE)\nif result['success']:\n    print(f\"Nonce found: {result['nonce']}\")\n    print(\"\\nHash outputs:\")\n    for i, algo in enumerate(result['algorithms']):\n        print(f\"  {algo:15} : {client.hash_to_hex(result['hashes'][i])}\")\n    # Verify\n    valid = server.verify_multi(TEST_TEXT, result['nonce'], algos_test2, DIFFICULTY)",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "result",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "result = client.generate_multi(TEST_TEXT, algos_test2, DIFFICULTY, 0, MAX_NONCE)\nif result['success']:\n    print(f\"Nonce found: {result['nonce']}\")\n    print(\"\\nHash outputs:\")\n    for i, algo in enumerate(result['algorithms']):\n        print(f\"  {algo:15} : {client.hash_to_hex(result['hashes'][i])}\")\n    # Verify\n    valid = server.verify_multi(TEST_TEXT, result['nonce'], algos_test2, DIFFICULTY)\n    print(f\"\\nVerification: {'✓ PASSED' if valid else '✗ FAILED'}\")\nelse:",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "algos_test3",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "algos_test3 = create_multi_pow_challenge(6, DIFFICULTY)\nprint(f\"Algorithms: {', '.join(algos_test3)}\")\nresult = client.generate_multi(TEST_TEXT, algos_test3, DIFFICULTY, 0, MAX_NONCE)\nif result['success']:\n    print(f\"Nonce found: {result['nonce']}\")\n    print(\"\\nHash outputs:\")\n    for i, algo in enumerate(result['algorithms']):\n        print(f\"  {algo:15} : {client.hash_to_hex(result['hashes'][i])}\")\n    # Verify\n    valid = server.verify_multi(TEST_TEXT, result['nonce'], algos_test3, DIFFICULTY)",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "result",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "result = client.generate_multi(TEST_TEXT, algos_test3, DIFFICULTY, 0, MAX_NONCE)\nif result['success']:\n    print(f\"Nonce found: {result['nonce']}\")\n    print(\"\\nHash outputs:\")\n    for i, algo in enumerate(result['algorithms']):\n        print(f\"  {algo:15} : {client.hash_to_hex(result['hashes'][i])}\")\n    # Verify\n    valid = server.verify_multi(TEST_TEXT, result['nonce'], algos_test3, DIFFICULTY)\n    print(f\"\\nVerification: {'✓ PASSED' if valid else '✗ FAILED'}\")\nelse:",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "result",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "result = client.generate_single(TEST_TEXT, \"MD5\", DIFFICULTY, 1000, MAX_NONCE)\nif result['success']:\n    print(f\"  Algorithm: MD5\")\n    print(f\"  Nonce: {result['nonce']} (started from 1000)\")\n    print(f\"  Hash:  {client.hash_to_hex(result['hash'])}\")\n    # Verify\n    valid = server.verify_single(TEST_TEXT, result['nonce'], \"MD5\", DIFFICULTY)\n    print(f\"  Verification: {'✓ PASSED' if valid else '✗ FAILED'}\")\nelse:\n    print(f\"  ✗ Failed to find nonce\")",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "result",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "result = client.generate_single(b\"different text\", \"SHA2-256\", DIFFICULTY, 0, MAX_NONCE)\nif result['success']:\n    print(f\"  Text: 'different text'\")\n    print(f\"  Nonce: {result['nonce']}\")\n    print(f\"  Hash:  {client.hash_to_hex(result['hash'])}\")\n    # Verify with correct text\n    valid = server.verify_single(b\"different text\", result['nonce'], \"SHA2-256\", DIFFICULTY)\n    print(f\"  Correct verification: {'✓ PASSED' if valid else '✗ FAILED'}\")\n    # Verify with wrong text (should fail)\n    valid_wrong = server.verify_single(b\"wrong text\", result['nonce'], \"SHA2-256\", DIFFICULTY)",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "valid",
+        "kind": 5,
+        "importPath": "python.main",
+        "description": "python.main",
+        "peekOfCode": "valid = server.verify_single(TEST_TEXT, 999999999, \"SHA2-256\", DIFFICULTY)\nprint(f\"  Verifying random nonce 999999999: {'✗ FAILED (correctly rejected)' if not valid else '✓ PASSED (should fail)'}\")\n# ============================================================================\n# Summary\n# ============================================================================\nprint(\"\\n\" + \"=\" * 80)\nprint(\"Test Suite Complete!\")\nprint(\"=\" * 80)\nprint(\"\\nKey Features Demonstrated:\")\nprint(\"  ✓ Single hash algorithm PoW generation and verification\")",
+        "detail": "python.main",
+        "documentation": {}
+    },
+    {
+        "label": "PoWResult",
+        "kind": 6,
+        "importPath": "python.utils_client",
+        "description": "python.utils_client",
+        "peekOfCode": "class PoWResult(ctypes.Structure):\n    _fields_ = [\n        (\"nonce\", ctypes.c_int),\n        (\"hash\", ctypes.c_ubyte * 128),\n        (\"hash_size\", ctypes.c_int)\n    ]\nclass MultiPoWResult(ctypes.Structure):\n    _fields_ = [\n        (\"nonce\", ctypes.c_int),\n        (\"hashes\", (ctypes.c_ubyte * 128) * 10),",
+        "detail": "python.utils_client",
+        "documentation": {}
+    },
+    {
+        "label": "MultiPoWResult",
+        "kind": 6,
+        "importPath": "python.utils_client",
+        "description": "python.utils_client",
+        "peekOfCode": "class MultiPoWResult(ctypes.Structure):\n    _fields_ = [\n        (\"nonce\", ctypes.c_int),\n        (\"hashes\", (ctypes.c_ubyte * 128) * 10),\n        (\"hash_sizes\", ctypes.c_int * 10),\n        (\"num_hashes\", ctypes.c_int)\n    ]\nclass PoWClient:\n    def __init__(self, dll_path):\n        \"\"\"Initialize the PoW client with the DLL\"\"\"",
+        "detail": "python.utils_client",
+        "documentation": {}
+    },
+    {
+        "label": "PoWClient",
+        "kind": 6,
+        "importPath": "python.utils_client",
+        "description": "python.utils_client",
+        "peekOfCode": "class PoWClient:\n    def __init__(self, dll_path):\n        \"\"\"Initialize the PoW client with the DLL\"\"\"\n        if not os.path.exists(dll_path):\n            raise FileNotFoundError(f\"Client DLL not found at {dll_path}\")\n        try:\n            self.client = ctypes.CDLL(dll_path)\n        except OSError as e:\n            raise OSError(\n                f\"Failed to load Client DLL from {dll_path}\\n\"",
+        "detail": "python.utils_client",
+        "documentation": {}
+    },
+    {
+        "label": "create_multi_pow_challenge",
+        "kind": 2,
+        "importPath": "python.utils_client",
+        "description": "python.utils_client",
+        "peekOfCode": "def create_multi_pow_challenge(algo_count, difficulty=12):\n    \"\"\"\n    Helper to create a multi-hash PoW challenge with optimal algorithm selection\n    Args:\n        algo_count: Number of algorithms to use (2-6 recommended)\n        difficulty: Difficulty level (bits of leading zeros)\n    Returns:\n        List of algorithm names in optimized order\n    \"\"\"\n    if algo_count < 2:",
+        "detail": "python.utils_client",
+        "documentation": {}
+    },
+    {
+        "label": "HASH_ALGORITHMS",
+        "kind": 5,
+        "importPath": "python.utils_client",
+        "description": "python.utils_client",
+        "peekOfCode": "HASH_ALGORITHMS = {\n    'MD4': 0, 'NT': 1, 'MD5': 2, 'HAS-160': 3,\n    'RIPEMD-256': 4, 'RIPEMD-128': 5,\n    'BLAKE2s-128': 6, 'BLAKE2s-160': 7, 'BLAKE2s-256': 8,\n    'BLAKE2b-512': 9, 'RIPEMD-320': 10,\n    'BLAKE2b-128': 11, 'BLAKE2b-384': 12, 'RIPEMD-160': 13,\n    'BLAKE2b-160': 14, 'BLAKE2b-256': 15,\n    'SHA2-256': 16, 'SHA-0': 17, 'SHA-1': 18, 'SHA2-224': 19,\n    'SHA2-512': 20, 'SHA2-384': 21,\n    'Whirlpool': 22,",
+        "detail": "python.utils_client",
+        "documentation": {}
+    },
+    {
+        "label": "OPTIMIZED_ORDER",
+        "kind": 5,
+        "importPath": "python.utils_client",
+        "description": "python.utils_client",
+        "peekOfCode": "OPTIMIZED_ORDER = [\n    'MD4', 'NT', 'MD5', 'HAS-160',\n    'RIPEMD-256', 'RIPEMD-128',\n    'BLAKE2s-128', 'BLAKE2s-160', 'BLAKE2s-256',\n    'BLAKE2b-512', 'RIPEMD-320',\n    'BLAKE2b-128', 'BLAKE2b-384', 'RIPEMD-160',\n    'BLAKE2b-160', 'BLAKE2b-256',\n    'SHA2-256', 'SHA-0', 'SHA-1', 'SHA2-224',\n    'SHA2-512', 'SHA2-384',\n    'Whirlpool',",
+        "detail": "python.utils_client",
+        "documentation": {}
+    },
+    {
+        "label": "PoWServer",
+        "kind": 6,
+        "importPath": "python.utils_server",
+        "description": "python.utils_server",
+        "peekOfCode": "class PoWServer:\n    def __init__(self, dll_path):\n        \"\"\"Initialize the PoW server with the DLL\"\"\"\n        if not os.path.exists(dll_path):\n            raise FileNotFoundError(f\"Server DLL not found at {dll_path}\")\n        try:\n            self.server = ctypes.CDLL(dll_path)\n        except OSError as e:\n            raise OSError(\n                f\"Failed to load Server DLL from {dll_path}\\n\"",
+        "detail": "python.utils_server",
+        "documentation": {}
+    },
+    {
+        "label": "HASH_ALGORITHMS",
+        "kind": 5,
+        "importPath": "python.utils_server",
+        "description": "python.utils_server",
+        "peekOfCode": "HASH_ALGORITHMS = {\n    'MD4': 0, 'NT': 1, 'MD5': 2, 'HAS-160': 3,\n    'RIPEMD-256': 4, 'RIPEMD-128': 5,\n    'BLAKE2s-128': 6, 'BLAKE2s-160': 7, 'BLAKE2s-256': 8,\n    'BLAKE2b-512': 9, 'RIPEMD-320': 10,\n    'BLAKE2b-128': 11, 'BLAKE2b-384': 12, 'RIPEMD-160': 13,\n    'BLAKE2b-160': 14, 'BLAKE2b-256': 15,\n    'SHA2-256': 16, 'SHA-0': 17, 'SHA-1': 18, 'SHA2-224': 19,\n    'SHA2-512': 20, 'SHA2-384': 21,\n    'Whirlpool': 22,",
+        "detail": "python.utils_server",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "generate_metadata",
+        "description": "generate_metadata",
+        "peekOfCode": "def main():\n    \"\"\"Generate metadata for downloaded binaries.\"\"\"\n    artifacts_dir = Path('downloaded-artifacts')\n    bin_dir = Path('bin')\n    bin_dir.mkdir(exist_ok=True)\n    # Map build names to platform/variant paths\n    platform_map = {\n        'windows': {'x64': '64', 'x86': '32'},\n        'linux': {'x86_64': '64', 'aarch64': 'arm64'},\n        'macos': {'x86_64': '64', 'arm64': 'arm64'},",
+        "detail": "generate_metadata",
+        "documentation": {}
+    }
+]
