@@ -1,7 +1,7 @@
 # Proof-of-Work Binaries
 
 **Repository**: [QudsLab/Proof-of-work](https://github.com/QudsLab/Proof-of-work)
-**Generated**: 2025-12-06 19:00 UTC
+**Generated**: 2025-12-06 19:08 UTC
 
 This directory contains pre-built binaries for multiple platforms.
 
@@ -17,6 +17,7 @@ This directory contains pre-built binaries for multiple platforms.
 | Android | armv7 | 3 |
 | Android | x86 | 3 |
 | Android | x86_64 | 3 |
+| Wasm | wasm | 5 |
 
 ## Download Links & Checksums
 
@@ -137,6 +138,30 @@ This directory contains pre-built binaries for multiple platforms.
 - **[export.h](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/android/x86_64/include/export.h)** (642 bytes)
   - SHA256: `0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1`
   - MD5: `0033188112cadff5e894e1cc4dcc438f`
+
+### Wasm
+
+#### wasm
+
+- **[export.h](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/include/export.h)** (642 bytes)
+  - SHA256: `0fe09c5c7129d1e8ef0347ef2821e1a982879d3af36afbe4ba5f0f1f16209ad1`
+  - MD5: `0033188112cadff5e894e1cc4dcc438f`
+
+- **[client.js](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/client.js)** (14,205 bytes)
+  - SHA256: `c051a24398bccd7d84b3b6498f0a5bc595207616f6d92a6afcdb8b7a95da7951`
+  - MD5: `7c7a9cf2cb65acd9d9edc9c436c04412`
+
+- **[server.js](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/server.js)** (14,165 bytes)
+  - SHA256: `7c2c4c698e510d6044669618b2c35a2f9950e395c3b0f177c061ea08b759f021`
+  - MD5: `f40906446927476108e09cfef54384a5`
+
+- **[server.wasm](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/server.wasm)** (99,152 bytes)
+  - SHA256: `e2d6e1fdfa3accf6f489f5587a3d7705ac373c4ccdf81ba6f0beb5d37dc56b1d`
+  - MD5: `f7d7c9b966f21768844a80ca8384748a`
+
+- **[client.wasm](https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/wasm/js/client.wasm)** (99,897 bytes)
+  - SHA256: `2a9bffc579db89d8b54e639ae424e0f951b712b3875d59d8588d747735d8fbbb`
+  - MD5: `287d0f4bc07c5f19c2a7c7a081ef772a`
 
 ## Usage
 
