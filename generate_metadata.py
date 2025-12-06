@@ -9,6 +9,11 @@ import json
 import hashlib
 from pathlib import Path
 from datetime import datetime
+from urllib.parse import quote
+
+# GitHub repository information
+GITHUB_REPO = "QudsLab/Proof-of-work"
+GITHUB_RAW_BASE = f"https://raw.githubusercontent.com/{GITHUB_REPO}/main"
 
 
 def main():
@@ -27,7 +32,8 @@ def main():
             'arm64-v8a': 'arm64',
             'x86': 'x86',
             'x86_64': 'x86_64'
-        }
+        },
+        'wasm': {'wasm': 'wasm'}
     }
     
     binary_info = {}
@@ -37,10 +43,15 @@ def main():
         if not artifact_dir.is_dir():
             continue
         
-        # Parse artifact name: binaries-{os}-{arch}
+        # Parse artifact name: binaries-{os}-{arch} or binaries-wasm
         name_parts = artifact_dir.name.replace('binaries-', '').split('-')
         os_name = name_parts[0]
-        arch = '-'.join(name_parts[1:])
+        
+        # Handle WASM special case (no arch suffix)
+        if os_name == 'wasm':
+            arch = 'wasm'
+        else:
+            arch = '-'.join(name_parts[1:])
         
         # Get variant from platform map
         if os_name not in platform_map or arch not in platform_map[os_name]:
@@ -48,7 +59,15 @@ def main():
             continue
         
         variant = platform_map[os_name][arch]
-        target_dir = bin_dir / os_name / variant
+        
+        # Determine target directory based on OS
+        if os_name == 'windows':
+            target_dir = bin_dir / 'win' / variant
+        elif os_name == 'wasm':
+            target_dir = bin_dir / 'wasm'
+        else:
+            target_dir = bin_dir / os_name / variant
+        
         target_dir.mkdir(parents=True, exist_ok=True)
         
         # Copy files and collect hashes
@@ -72,10 +91,21 @@ def main():
             md5_hash = hashlib.md5(file_content).hexdigest()
             sha256_hash = hashlib.sha256(file_content).hexdigest()
             
+            # Generate GitHub raw URL
+            if os_name == 'windows':
+                github_path = f"bin/win/{variant}/{rel_path.as_posix()}"
+            elif os_name == 'wasm':
+                github_path = f"bin/wasm/{rel_path.as_posix()}"
+            else:
+                github_path = f"bin/{os_name}/{variant}/{rel_path.as_posix()}"
+            
+            github_url = f"{GITHUB_RAW_BASE}/{quote(github_path)}"
+            
             binary_info[platform_key].append({
                 'filename': file_path.name,
                 'path': str(rel_path),
                 'size': len(file_content),
+                'url': github_url,
                 'hashes': {
                     'md5': md5_hash,
                     'sha256': sha256_hash
@@ -85,6 +115,7 @@ def main():
     # Generate binaries.json
     metadata = {
         'version': '1.0.0',
+        'repository': f"https://github.com/{GITHUB_REPO}",
         'generated': datetime.utcnow().isoformat() + 'Z',
         'binaries': {}
     }
@@ -101,7 +132,10 @@ def main():
     readme_lines = [
         "# Proof-of-Work Binaries",
         "",
+        f"**Repository**: [{GITHUB_REPO}](https://github.com/{GITHUB_REPO})",
         f"**Generated**: {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}",
+        "",
+        "This directory contains pre-built binaries for multiple platforms.",
         ""
     ]
     
@@ -111,19 +145,19 @@ def main():
     readme_lines.append("| Platform | Variant | Files |")
     readme_lines.append("|----------|---------|-------|")
     
-    for os_name in ['windows', 'linux', 'macos', 'android']:
+    for os_name in ['windows', 'linux', 'macos', 'android', 'wasm']:
         platforms = sorted([k for k in binary_info.keys() if k.startswith(os_name)])
         for platform_key in platforms:
             variant = platform_key.split('/')[1]
             file_count = len(binary_info[platform_key])
             readme_lines.append(f"| {os_name.title()} | {variant} | {file_count} |")
     
-    # Checksums section
     readme_lines.append("")
-    readme_lines.append("## Checksums")
+    readme_lines.append("## Download Links & Checksums")
     readme_lines.append("")
     
-    for os_name in ['windows', 'linux', 'macos', 'android']:
+    # Detailed sections with download links
+    for os_name in ['windows', 'linux', 'macos', 'android', 'wasm']:
         platforms = sorted([k for k in binary_info.keys() if k.startswith(os_name)])
         if platforms:
             readme_lines.append(f"### {os_name.title()}")
@@ -136,16 +170,44 @@ def main():
                 
                 for file_info in binary_info[platform_key]:
                     filename = file_info['filename']
+                    url = file_info['url']
                     sha256 = file_info['hashes']['sha256']
                     md5 = file_info['hashes']['md5']
                     size = file_info['size']
                     
-                    readme_lines.append(
-                        f"- **{filename}** ({size:,} bytes)"
-                    )
+                    readme_lines.append(f"- **[{filename}]({url})** ({size:,} bytes)")
                     readme_lines.append(f"  - SHA256: `{sha256}`")
                     readme_lines.append(f"  - MD5: `{md5}`")
                     readme_lines.append("")
+    
+    # Usage instructions
+    readme_lines.extend([
+        "## Usage",
+        "",
+        "### Download via curl",
+        "```bash",
+        "# Example: Download Windows x64 client DLL",
+        f"curl -O {GITHUB_RAW_BASE}/bin/win/64/dll/client.dll",
+        "```",
+        "",
+        "### Download via wget",
+        "```bash",
+        "# Example: Download Linux x64 client library",
+        f"wget {GITHUB_RAW_BASE}/bin/linux/64/lib/libclient.so",
+        "```",
+        "",
+        "### Verify checksums",
+        "```bash",
+        "# Linux/macOS",
+        "sha256sum client.dll",
+        "md5sum client.dll",
+        "",
+        "# Windows PowerShell",
+        "Get-FileHash client.dll -Algorithm SHA256",
+        "Get-FileHash client.dll -Algorithm MD5",
+        "```",
+        ""
+    ])
     
     readme_path = bin_dir / 'README.md'
     readme_path.write_text('\n'.join(readme_lines))
