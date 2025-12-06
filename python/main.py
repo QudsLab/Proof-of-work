@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Enhanced Proof-of-Work Test Suite
 Tests single and multi-hash PoW with all supported algorithms
@@ -24,10 +25,22 @@ if len(sys.argv) > 1:
     OS__TYPE = sys.argv[1].lower()
     VARIANT = sys.argv[2].lower()
 
-# BIN_PATH = BASE_DIR / "bin" / "win" / "64" / "dll"
-BIN_PATH = BASE_DIR / "bin" / OS__TYPE / VARIANT / "dll"
-SERVER_DLL = str(BIN_PATH / "server.dll")
-CLIENT_DLL = str(BIN_PATH / "client.dll")
+# Determine library paths based on OS
+if OS__TYPE == "win":
+    BIN_PATH = BASE_DIR / "bin" / "win" / VARIANT / "dll"
+    SERVER_DLL = str(BIN_PATH / "server.dll")
+    CLIENT_DLL = str(BIN_PATH / "client.dll")
+elif OS__TYPE == "linux":
+    BIN_PATH = BASE_DIR / "bin" / "linux" / VARIANT / "lib"
+    SERVER_DLL = str(BIN_PATH / "libserver.so")
+    CLIENT_DLL = str(BIN_PATH / "libclient.so")
+elif OS__TYPE == "macos":
+    BIN_PATH = BASE_DIR / "bin" / "macos" / VARIANT / "lib"
+    SERVER_DLL = str(BIN_PATH / "libserver.dylib")
+    CLIENT_DLL = str(BIN_PATH / "libclient.dylib")
+else:
+    print(f"ERROR: Unknown OS type '{OS__TYPE}'")
+    sys.exit(1)
 
 print("=" * 80)
 print("Enhanced Proof-of-Work Test Suite")
@@ -73,9 +86,10 @@ for algo in single_tests:
         
         # Verify
         valid = server.verify_single(TEST_TEXT, result['nonce'], algo, DIFFICULTY)
-        print(f"  Verification: {'✓ PASSED' if valid else '✗ FAILED'}")
+        status = "PASSED" if valid else "FAILED"
+        print(f"  Verification: {status}")
     else:
-        print(f"  ✗ Failed to find nonce within {MAX_NONCE} attempts")
+        print(f"  FAILED: No nonce found within {MAX_NONCE} attempts")
 
 # ============================================================================
 # PART 2: Multi-Hash PoW Tests (2-3 examples with 4-6 algorithms each)
@@ -101,9 +115,10 @@ if result['success']:
     
     # Verify
     valid = server.verify_multi(TEST_TEXT, result['nonce'], algos_test1, DIFFICULTY)
-    print(f"\nVerification: {'✓ PASSED' if valid else '✗ FAILED'}")
+    status = "PASSED" if valid else "FAILED"
+    print(f"\nVerification: {status}")
 else:
-    print(f"✗ Failed to find nonce within {MAX_NONCE} attempts")
+    print(f"FAILED: No nonce found within {MAX_NONCE} attempts")
 
 # Multi-hash test 2: 5 algorithms (medium difficulty)
 print("\n" + "-" * 80)
@@ -121,9 +136,10 @@ if result['success']:
     
     # Verify
     valid = server.verify_multi(TEST_TEXT, result['nonce'], algos_test2, DIFFICULTY)
-    print(f"\nVerification: {'✓ PASSED' if valid else '✗ FAILED'}")
+    status = "PASSED" if valid else "FAILED"
+    print(f"\nVerification: {status}")
 else:
-    print(f"✗ Failed to find nonce within {MAX_NONCE} attempts")
+    print(f"FAILED: No nonce found within {MAX_NONCE} attempts")
 
 # Multi-hash test 3: 6 algorithms (challenging)
 print("\n" + "-" * 80)
@@ -141,9 +157,10 @@ if result['success']:
     
     # Verify
     valid = server.verify_multi(TEST_TEXT, result['nonce'], algos_test3, DIFFICULTY)
-    print(f"\nVerification: {'✓ PASSED' if valid else '✗ FAILED'}")
+    status = "PASSED" if valid else "FAILED"
+    print(f"\nVerification: {status}")
 else:
-    print(f"✗ Failed to find nonce within {MAX_NONCE} attempts")
+    print(f"FAILED: No nonce found within {MAX_NONCE} attempts")
 
 # ============================================================================
 # PART 3: Custom Nonce Range Test
@@ -161,9 +178,10 @@ if result['success']:
     
     # Verify
     valid = server.verify_single(TEST_TEXT, result['nonce'], "MD5", DIFFICULTY)
-    print(f"  Verification: {'✓ PASSED' if valid else '✗ FAILED'}")
+    status = "PASSED" if valid else "FAILED"
+    print(f"  Verification: {status}")
 else:
-    print(f"  ✗ Failed to find nonce")
+    print(f"  FAILED: No nonce found")
 
 # ============================================================================
 # PART 4: Edge Cases and Validation
@@ -182,16 +200,19 @@ if result['success']:
     
     # Verify with correct text
     valid = server.verify_single(b"different text", result['nonce'], "SHA2-256", DIFFICULTY)
-    print(f"  Correct verification: {'✓ PASSED' if valid else '✗ FAILED'}")
+    status = "PASSED" if valid else "FAILED"
+    print(f"  Correct verification: {status}")
     
     # Verify with wrong text (should fail)
     valid_wrong = server.verify_single(b"wrong text", result['nonce'], "SHA2-256", DIFFICULTY)
-    print(f"  Wrong text verification: {'✓ PASSED (correctly rejected)' if not valid_wrong else '✗ FAILED (should reject)'}")
+    status_wrong = "PASSED (correctly rejected)" if not valid_wrong else "FAILED (should reject)"
+    print(f"  Wrong text verification: {status_wrong}")
 
 # Test with invalid nonce (should fail verification)
 print("\nTest: Invalid nonce verification")
 valid = server.verify_single(TEST_TEXT, 999999999, "SHA2-256", DIFFICULTY)
-print(f"  Verifying random nonce 999999999: {'✗ FAILED (correctly rejected)' if not valid else '✓ PASSED (should fail)'}")
+status = "FAILED (correctly rejected)" if not valid else "PASSED (should fail)"
+print(f"  Verifying random nonce 999999999: {status}")
 
 # ============================================================================
 # Summary
@@ -200,11 +221,11 @@ print("\n" + "=" * 80)
 print("Test Suite Complete!")
 print("=" * 80)
 print("\nKey Features Demonstrated:")
-print("  ✓ Single hash algorithm PoW generation and verification")
-print("  ✓ Multi-hash PoW with 4, 5, and 6 algorithms")
-print("  ✓ Custom nonce range (starting from non-zero values)")
-print("  ✓ Algorithm-optimized ordering for efficiency")
-print("  ✓ Comprehensive verification tests")
+print("  [OK] Single hash algorithm PoW generation and verification")
+print("  [OK] Multi-hash PoW with 4, 5, and 6 algorithms")
+print("  [OK] Custom nonce range (starting from non-zero values)")
+print("  [OK] Algorithm-optimized ordering for efficiency")
+print("  [OK] Comprehensive verification tests")
 print("  ✓ Edge case handling and validation")
 print("\nAll 34 hash algorithms are supported:")
 print("  MD2, MD4, MD5, NT Hash, HAS-160,")
