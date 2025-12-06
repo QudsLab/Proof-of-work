@@ -49,7 +49,6 @@ jobs:
       with:
         cygwin: false
         cc: yes
-        version: latest
         platform: ${{ matrix.arch }}
 
     - name: Verify GCC installation
