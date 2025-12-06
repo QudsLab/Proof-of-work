@@ -1,354 +1,187 @@
-name: Build Proof-of-Work Binaries
+name: Build Multi-Platform Binaries
 
 on:
-  # Trigger on push to main (automatic)
   push:
-    branches:
-      - main
-    paths:
-      - 'src/**'
-      - 'python/**'
-      - 'build_win64.ps1'
-      - '.github/workflows/build-binaries.yml'
-  
-  # Daily automated build at 00:00 UTC
+    branches: [main]
+    paths: ['src/**', 'python/**', 'build_win64.ps1', '.github/workflows/build-binaries.yml']
   schedule:
     - cron: '0 0 * * *'
-
-  # Manual trigger
   workflow_dispatch:
 
 permissions:
   contents: write
-  actions: read
 
 jobs:
   build_windows:
-    name: Build Windows Binaries (${{ matrix.arch }})
+    name: Build Windows (${{ matrix.arch }})
     runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
         include:
           - arch: x64
-            target: win64
+            variant: 64
           - arch: x86
-            target: win32
-
+            variant: 32
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: choco install mingw -y --no-progress
+      - run: gcc --version
+      - run: .\build_win64.ps1
+        shell: pwsh
+      - run: |
+          if (!(Test-Path ".\bin\win\${{ matrix.variant }}\dll\client.dll")) { exit 1 }
+          if (!(Test-Path ".\bin\win\${{ matrix.variant }}\dll\server.dll")) { exit 1 }
+        shell: pwsh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-windows-${{ matrix.arch }}
+          path: bin/win/${{ matrix.variant }}/
+          retention-days: 1
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-
-    - name: Install GCC via Chocolatey
-      shell: pwsh
-      run: |
-        Write-Host "Installing MinGW-w64..." -ForegroundColor Green
-        choco install mingw --version=12.2.0 -y --no-progress
-        Write-Host "MinGW installation completed" -ForegroundColor Green
-
-    - name: Verify GCC installation
-      shell: pwsh
-      run: |
-        Write-Host "Checking GCC installation..." -ForegroundColor Green
-        gcc --version
-        where gcc
-        if ($LASTEXITCODE -ne 0) {
-          Write-Host "GCC not found in PATH, searching..." -ForegroundColor Yellow
-          $gccPath = @(Get-ChildItem -Path "C:\tools\mingw*\bin\gcc.exe" -ErrorAction SilentlyContinue | Select-Object -First 1)
-          if ($gccPath) {
-            $gccDir = Split-Path $gccPath
-            $env:PATH = "$gccDir;$env:PATH"
-            Write-Host "Found GCC at: $gccPath" -ForegroundColor Green
-            gcc --version
-          } else {
-            Write-Host "WARNING: GCC not found, will attempt build anyway" -ForegroundColor Yellow
-          }
-        }
-
-    - name: Build DLLs (${{ matrix.arch }})
-      shell: pwsh
-      run: |
-        Write-Host "Starting build for ${{ matrix.arch }}..." -ForegroundColor Green
-        .\build_win64.ps1
-        if ($LASTEXITCODE -ne 0) {
-          Write-Host "Build failed with exit code $LASTEXITCODE" -ForegroundColor Red
-          exit 1
-        }
-        Write-Host "Build completed successfully!" -ForegroundColor Green
-
-    - name: Verify binaries
-      shell: pwsh
-      run: |
-        Write-Host "Checking for built binaries..."
-        $clientDll = ".\bin\win\64\dll\client.dll"
-        $serverDll = ".\bin\win\64\dll\server.dll"
-        
-        if (Test-Path $clientDll) {
-          $size = (Get-Item $clientDll).Length / 1KB
-          Write-Host "✓ client.dll found ($('{0:N2}' -f $size) KB)"
-        } else {
-          Write-Host "✗ client.dll NOT found" -ForegroundColor Red
-          exit 1
-        }
-        
-        if (Test-Path $serverDll) {
-          $size = (Get-Item $serverDll).Length / 1KB
-          Write-Host "✓ server.dll found ($('{0:N2}' -f $size) KB)"
-        } else {
-          Write-Host "✗ server.dll NOT found" -ForegroundColor Red
-          exit 1
-        }
-
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: binaries-windows-${{ matrix.arch }}
-        path: bin/win/
-        retention-days: 30
-
-  test_binaries:
-    name: Test Binaries (Windows ${{ matrix.arch }})
-    needs: build_windows
-    runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - arch: x64
-            target: win64
-          - arch: x86
-            target: win32
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: binaries-windows-${{ matrix.arch }}
-        path: bin/win/
-
-    - name: Verify downloaded binaries
-      shell: pwsh
-      run: |
-        Write-Host "Checking downloaded binaries..."
-        if (Test-Path ".\bin\win\64\dll\client.dll") {
-          Write-Host "✓ client.dll verified"
-          Get-Item ".\bin\win\64\dll\client.dll" | Format-List
-        } else {
-          Write-Host "✗ client.dll not found" -ForegroundColor Red
-          exit 1
-        }
-        
-        if (Test-Path ".\bin\win\64\dll\server.dll") {
-          Write-Host "✓ server.dll verified"
-          Get-Item ".\bin\win\64\dll\server.dll" | Format-List
-        } else {
-          Write-Host "✗ server.dll not found" -ForegroundColor Red
-          exit 1
-        }
-
-    - name: Run test suite
-      shell: pwsh
-      run: |
-        Write-Host "Running test suite..." -ForegroundColor Green
-        Write-Host "Command: python `"python/main.py`" win 64`n"
-        python "python/main.py" win 64
-        
-        if ($LASTEXITCODE -eq 0) {
-          Write-Host "`n✓ Tests passed!" -ForegroundColor Green
-        } else {
-          Write-Host "`n✗ Tests failed!" -ForegroundColor Red
-          exit 1
-        }
-
-    - name: Test summary
-      if: always()
-      shell: pwsh
-      run: |
-        Write-Host "## Test Results - Windows ${{ matrix.arch }}" >> $env:GITHUB_STEP_SUMMARY
-        Write-Host "" >> $env:GITHUB_STEP_SUMMARY
-        Write-Host "| Component | Status |" >> $env:GITHUB_STEP_SUMMARY
-        Write-Host "|-----------|--------|" >> $env:GITHUB_STEP_SUMMARY
-        Write-Host "| Build | ✓ Passed |" >> $env:GITHUB_STEP_SUMMARY
-        Write-Host "| Tests | ✓ Passed |" >> $env:GITHUB_STEP_SUMMARY
-        Write-Host "" >> $env:GITHUB_STEP_SUMMARY
-        Write-Host "**Platform**: Windows ${{ matrix.arch }}" >> $env:GITHUB_STEP_SUMMARY
-
-  commit_binaries:
-    name: Commit Binaries to Repository
-    needs: [build_windows, test_binaries]
+  build_linux:
+    name: Build Linux (${{ matrix.arch }})
     runs-on: ubuntu-latest
-    if: always() && needs.build_windows.result == 'success' && needs.test_binaries.result == 'success'
-
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            variant: 64
+          - arch: aarch64
+            variant: arm64
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v4
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential
+          mkdir -p bin/linux/${{ matrix.variant }}/lib bin/linux/${{ matrix.variant }}/include
+          HASH_SOURCES=$(find src/crypto -name "*.c" | tr '\n' ' ')
+          INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
+          gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/lib/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/lib/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          cp src/export.h bin/linux/${{ matrix.variant }}/include/
+          [ -f "bin/linux/${{ matrix.variant }}/lib/libclient.so" ] || exit 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-linux-${{ matrix.arch }}
+          path: bin/linux/${{ matrix.variant }}/
+          retention-days: 1
 
-    - name: Download all artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: downloaded-artifacts
+  build_macos:
+    name: Build macOS (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: x86_64
+            runner: macos-13
+            variant: 64
+          - arch: arm64
+            runner: macos-latest
+            variant: arm64
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          mkdir -p bin/macos/${{ matrix.variant }}/lib bin/macos/${{ matrix.variant }}/include
+          HASH_SOURCES=$(find src/crypto -name "*.c" | tr '\n' ' ')
+          INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
+          gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/lib/libclient.dylib src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/lib/libserver.dylib src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          cp src/export.h bin/macos/${{ matrix.variant }}/include/
+          [ -f "bin/macos/${{ matrix.variant }}/lib/libclient.dylib" ] || exit 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-macos-${{ matrix.arch }}
+          path: bin/macos/${{ matrix.variant }}/
+          retention-days: 1
 
-    - name: Organize binaries
-      run: |
-        # List downloaded artifacts for debugging
-        echo "Downloaded artifacts:"
-        ls -la downloaded-artifacts/
-        
-        # Create bin directory if it doesn't exist
-        mkdir -p bin/win/64/dll
-        mkdir -p bin/win/64/lib
-        
-        # Move all downloaded artifacts to bin/
-        for artifact_dir in downloaded-artifacts/binaries-windows-*; do
-          if [ -d "$artifact_dir" ]; then
-            arch=$(basename "$artifact_dir" | sed 's/^binaries-windows-//')
-            echo "Processing Windows $arch binaries"
-            echo "  Contents of artifact:"
-            ls -la "$artifact_dir/" || true
-            
-            # Copy DLL and LIB files
-            cp -v "$artifact_dir"/64/dll/*.dll bin/win/64/dll/ 2>/dev/null || true
-            cp -v "$artifact_dir"/64/lib/*.lib bin/win/64/lib/ 2>/dev/null || true
+  build_android:
+    name: Build Android (${{ matrix.abi }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - abi: armeabi-v7a
+            variant: armv7
+          - abi: arm64-v8a
+            variant: arm64
+          - abi: x86
+            variant: x86
+          - abi: x86_64
+            variant: x86_64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r25c
+      - run: |
+          mkdir -p bin/android/${{ matrix.variant }}/lib bin/android/${{ matrix.variant }}/include
+          NDK=$ANDROID_NDK_ROOT
+          TC=$NDK/toolchains/llvm/prebuilt/linux-x86_64
+          CC_CMD=$TC/bin
+          case "${{ matrix.abi }}" in
+            armeabi-v7a) CC=$CC_CMD/armv7a-linux-androideabi21-clang;;
+            arm64-v8a) CC=$CC_CMD/aarch64-linux-android21-clang;;
+            x86) CC=$CC_CMD/i686-linux-android21-clang;;
+            x86_64) CC=$CC_CMD/x86_64-linux-android21-clang;;
+          esac
+          HASH_SOURCES=$(find src/crypto -name "*.c" | tr '\n' ' ')
+          INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
+          $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/lib/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/lib/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          cp src/export.h bin/android/${{ matrix.variant }}/include/
+          [ -f "bin/android/${{ matrix.variant }}/lib/libclient.so" ] || exit 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-android-${{ matrix.abi }}
+          path: bin/android/${{ matrix.variant }}/
+          retention-days: 1
+
+  organize_and_commit:
+    name: Organize & Commit Binaries
+    needs: [build_windows, build_linux, build_macos, build_android]
+    runs-on: ubuntu-latest
+    if: always() && (needs.build_windows.result == 'success' || needs.build_linux.result == 'success' || needs.build_macos.result == 'success' || needs.build_android.result == 'success')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/download-artifact@v4
+        with:
+          path: downloaded-artifacts
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: python3 generate_metadata.py
+      - run: find bin -type f | head -20
+      - run: git config user.email "bot@github.com" && git config user.name "GitHub Bot"
+      - run: |
+          git add bin/
+          if ! git diff --staged --quiet; then
+            cnt=$(find bin -type f \( -name "*.dll" -o -name "*.so" -o -name "*.dylib" \) | wc -l)
+            git commit -m "Build: Add $cnt binaries" -m "Run: ${{ github.run_id }}"
+            git pull --rebase origin main || true
+            git push origin main
           fi
-        done
-        
-        # List final bin structure
-        echo "Final bin structure:"
-        find bin -type f -ls
-        
-        # Create build info file
-        cat > bin/BUILD_INFO.txt << 'EOF'
-        Proof-of-Work Binary Build Information
-        ========================================
-        
-        Build Date: $(date -u)
-        GitHub Run ID: ${{ github.run_id }}
-        GitHub Run Number: ${{ github.run_number }}
-        Triggered by: ${{ github.event_name }}
-        Commit: ${{ github.sha }}
-        
-        Successfully built binaries:
-        EOF
-        
-        find bin -type f \( -name "*.dll" -o -name "*.lib" \) | sed 's|bin/||g' | sort >> bin/BUILD_INFO.txt
-        
-        echo "" >> bin/BUILD_INFO.txt
-        echo "Total binaries: $(find bin -type f \( -name "*.dll" -o -name "*.lib" \) | wc -l)" >> bin/BUILD_INFO.txt
-        
-        # List all binaries
-        echo "Built binaries:"
-        find bin -type f \( -name "*.dll" -o -name "*.lib" \) -ls
 
-    - name: Configure Git
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-
-    - name: Commit and push binaries
-      run: |
-        git add bin/
-        
-        if git diff --staged --quiet; then
-          echo "No changes to commit"
-        else
-          # Count binaries
-          binary_count=$(find bin -type f \( -name "*.dll" -o -name "*.lib" \) | wc -l)
-          
-          git commit -m "Build: Update $binary_count binaries [skip ci]" \
-                     -m "Run: ${{ github.run_id }}" \
-                     -m "Commit: ${{ github.sha }}"
-          
-          # Pull latest changes with merge strategy
-          git pull --no-rebase origin main || git pull --rebase origin main || true
-          
-          # Push with retry logic
-          max_retries=3
-          retry_count=0
-          while [ $retry_count -lt $max_retries ]; do
-            if git push origin main; then
-              echo "Binaries committed and pushed successfully!"
-              break
-            else
-              retry_count=$((retry_count + 1))
-              if [ $retry_count -lt $max_retries ]; then
-                echo "Push failed, retrying ($retry_count/$max_retries)..."
-                git pull --rebase origin main || true
-                sleep 2
-              else
-                echo "Failed to push after $max_retries attempts"
-                exit 1
-              fi
-            fi
-          done
-        fi
-
-    - name: Create build summary
-      if: always()
-      run: |
-        echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "| Platform | Status | Binaries |" >> $GITHUB_STEP_SUMMARY
-        echo "|----------|--------|----------|" >> $GITHUB_STEP_SUMMARY
-        
-        for platform_dir in bin/win/*/; do
-          if [ -d "$platform_dir" ]; then
-            dll_count=$(find "$platform_dir" -name "*.dll" 2>/dev/null | wc -l)
-            lib_count=$(find "$platform_dir" -name "*.lib" 2>/dev/null | wc -l)
-            if [ $((dll_count + lib_count)) -gt 0 ]; then
-              echo "| Windows 64-bit | ✓ Built | $dll_count DLL, $lib_count LIB |" >> $GITHUB_STEP_SUMMARY
-            fi
-          fi
-        done
-        
-        echo "" >> $GITHUB_STEP_SUMMARY
-        total_binaries=$(find bin -type f \( -name "*.dll" -o -name "*.lib" \) 2>/dev/null | wc -l)
-        echo "**Total binaries**: $total_binaries" >> $GITHUB_STEP_SUMMARY
-        echo "**Run ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
-        echo "**Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-
-  final_report:
+  report:
     name: Build Report
-    needs: [build_windows, test_binaries, commit_binaries]
+    needs: [build_windows, build_linux, build_macos, build_android, organize_and_commit]
     runs-on: ubuntu-latest
     if: always()
-
     steps:
-    - name: Generate report
-      run: |
-        echo "## Proof-of-Work Build Workflow Report" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Job Status" >> $GITHUB_STEP_SUMMARY
-        echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
-        echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
-        echo "| Build Windows | ${{ needs.build_windows.result }} |" >> $GITHUB_STEP_SUMMARY
-        echo "| Test Binaries | ${{ needs.test_binaries.result }} |" >> $GITHUB_STEP_SUMMARY
-        echo "| Commit Binaries | ${{ needs.commit_binaries.result }} |" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### Workflow Details" >> $GITHUB_STEP_SUMMARY
-        echo "- **Triggered by**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Branch**: ${{ github.ref }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
-        echo "- **Run ID**: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
-        
-        if [ "${{ needs.build_windows.result }}" = "success" ] && [ "${{ needs.test_binaries.result }}" = "success" ]; then
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ **All builds and tests passed!**" >> $GITHUB_STEP_SUMMARY
-        else
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "❌ **Build or test failed**" >> $GITHUB_STEP_SUMMARY
-        fi
+      - run: |
+          echo "## Build Status" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Windows | ${{ needs.build_windows.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Linux | ${{ needs.build_linux.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| macOS | ${{ needs.build_macos.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Android | ${{ needs.build_android.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | ${{ needs.organize_and_commit.result }} |" >> $GITHUB_STEP_SUMMARY
