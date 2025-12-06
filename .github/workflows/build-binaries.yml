@@ -3,7 +3,6 @@ name: Build Multi-Platform Binaries
 on:
   push:
     branches: [main]
-    paths: ['src/**', 'python/**', 'build_win64.ps1', '.github/workflows/build-binaries.yml']
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
@@ -143,11 +142,110 @@ jobs:
           path: bin/android/${{ matrix.variant }}/
           retention-days: 1
 
+  build_wasm:
+    name: Build WebAssembly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: '3.1.51'
+      - run: |
+          mkdir -p bin/wasm/js bin/wasm/include
+          HASH_SOURCES=$(find src/crypto -name "*.c" | tr '\n' ' ')
+          INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
+          emcc src/client.c $HASH_SOURCES -o bin/wasm/js/client.js \
+            -s EXPORTED_RUNTIME_METHODS='["cwrap", "ccall"]' \
+            -s MODULARIZE=1 \
+            -s EXPORT_NAME='ProofOfWorkClient' \
+            -s ALLOW_MEMORY_GROWTH=1 \
+            -s EXPORTED_FUNCTIONS='["_pow_mine", "_malloc", "_free"]' \
+            -Isrc $INCLUDE_DIRS \
+            -O3
+          emcc src/server.c $HASH_SOURCES -o bin/wasm/js/server.js \
+            -s EXPORTED_RUNTIME_METHODS='["cwrap", "ccall"]' \
+            -s MODULARIZE=1 \
+            -s EXPORT_NAME='ProofOfWorkServer' \
+            -s ALLOW_MEMORY_GROWTH=1 \
+            -s EXPORTED_FUNCTIONS='["_pow_verify", "_malloc", "_free"]' \
+            -Isrc $INCLUDE_DIRS \
+            -O3
+          cp src/export.h bin/wasm/include/
+          [ -f "bin/wasm/js/client.js" ] || exit 1
+          [ -f "bin/wasm/js/client.wasm" ] || exit 1
+          [ -f "bin/wasm/js/server.js" ] || exit 1
+          [ -f "bin/wasm/js/server.wasm" ] || exit 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-wasm
+          path: bin/wasm/
+          retention-days: 1
+
+  test_windows:
+    name: Test Windows Binaries
+    needs: build_windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: binaries-windows-x64
+          path: bin/win/64/
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: python python/main.py
+        shell: pwsh
+
+  test_linux:
+    name: Test Linux Binaries
+    needs: build_linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: binaries-linux-x86_64
+          path: bin/linux/64/
+      - run: python3 python/main.py
+
+  test_macos:
+    name: Test macOS Binaries
+    needs: build_macos
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: binaries-macos-x86_64
+          path: bin/macos/64/
+      - run: python3 python/main.py
+
+  test_wasm:
+    name: Test WebAssembly
+    needs: build_wasm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: binaries-wasm
+          path: bin/wasm/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: |
+          if [ -f "js/test.js" ]; then
+            node js/test.js
+          else
+            echo "⚠ No WASM test found, skipping"
+          fi
+
   organize_and_commit:
     name: Organize & Commit Binaries
-    needs: [build_windows, build_linux, build_macos, build_android]
+    needs: [build_windows, build_linux, build_macos, build_android, build_wasm, test_windows, test_linux, test_macos, test_wasm]
     runs-on: ubuntu-latest
-    if: always() && (needs.build_windows.result == 'success' || needs.build_linux.result == 'success' || needs.build_macos.result == 'success' || needs.build_android.result == 'success')
+    if: always() && (needs.build_windows.result == 'success' || needs.build_linux.result == 'success' || needs.build_macos.result == 'success' || needs.build_android.result == 'success' || needs.build_wasm.result == 'success')
     steps:
       - uses: actions/checkout@v4
         with:
@@ -159,20 +257,20 @@ jobs:
         with:
           python-version: '3.11'
       - run: python3 generate_metadata.py
-      - run: find bin -type f | head -20
+      - run: find bin -type f | head -30
       - run: git config user.email "bot@github.com" && git config user.name "GitHub Bot"
       - run: |
           git add bin/
           if ! git diff --staged --quiet; then
-            cnt=$(find bin -type f \( -name "*.dll" -o -name "*.so" -o -name "*.dylib" \) | wc -l)
-            git commit -m "Build: Add $cnt binaries" -m "Run: ${{ github.run_id }}"
+            cnt=$(find bin -type f \( -name "*.dll" -o -name "*.so" -o -name "*.dylib" -o -name "*.wasm" -o -name "*.js" \) | wc -l)
+            git commit -m "Build: Add $cnt binaries [skip ci]" -m "Run: ${{ github.run_id }}"
             git pull --rebase origin main || true
             git push origin main
           fi
 
   report:
     name: Build Report
-    needs: [build_windows, build_linux, build_macos, build_android, organize_and_commit]
+    needs: [build_windows, build_linux, build_macos, build_android, build_wasm, test_windows, test_linux, test_macos, test_wasm, organize_and_commit]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -184,4 +282,9 @@ jobs:
           echo "| Linux | ${{ needs.build_linux.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| macOS | ${{ needs.build_macos.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Android | ${{ needs.build_android.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| WASM | ${{ needs.build_wasm.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test Windows | ${{ needs.test_windows.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test Linux | ${{ needs.test_linux.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test macOS | ${{ needs.test_macos.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test WASM | ${{ needs.test_wasm.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Commit | ${{ needs.organize_and_commit.result }} |" >> $GITHUB_STEP_SUMMARY
