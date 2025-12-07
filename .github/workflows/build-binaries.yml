@@ -32,8 +32,8 @@ jobs:
       - run: .\build_win64.ps1 -Variant ${{ matrix.variant }}
         shell: pwsh
       - run: |
-          if (!(Test-Path ".\bin\win\${{ matrix.variant }}\lib\client.dll")) { exit 1 }
-          if (!(Test-Path ".\bin\win\${{ matrix.variant }}\lib\server.dll")) { exit 1 }
+          if (!(Test-Path ".\bin\win\${{ matrix.variant }}\client\client.dll")) { exit 1 }
+          if (!(Test-Path ".\bin\win\${{ matrix.variant }}\server\server.dll")) { exit 1 }
         shell: pwsh
       - uses: actions/upload-artifact@v4
         with:
@@ -57,16 +57,17 @@ jobs:
       - run: |
           sudo apt-get update
           sudo apt-get install -y build-essential
-          mkdir -p bin/linux/${{ matrix.variant }}/lib bin/linux/${{ matrix.variant }}/c_lib bin/linux/${{ matrix.variant }}/include
+          mkdir -p bin/linux/${{ matrix.variant }}/client bin/linux/${{ matrix.variant }}/server
           HASH_SOURCES=$(find src/crypto -name "*.c" ! -name "main.c" | tr '\n' ' ')
           INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
-          gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/lib/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/lib/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          cp bin/linux/${{ matrix.variant }}/lib/libclient.so bin/linux/${{ matrix.variant }}/c_lib/
-          cp bin/linux/${{ matrix.variant }}/lib/libserver.so bin/linux/${{ matrix.variant }}/c_lib/
-          cp src/export.h bin/linux/${{ matrix.variant }}/include/
-          [ -f "bin/linux/${{ matrix.variant }}/lib/libclient.so" ] || exit 1
-          [ -f "bin/linux/${{ matrix.variant }}/lib/libserver.so" ] || exit 1
+          gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/client/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/server/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          # Try to build static libs for c_lib (optional)
+          mkdir -p bin/linux/${{ matrix.variant }}/client/c_lib bin/linux/${{ matrix.variant }}/server/c_lib || true
+          gcc -c -fPIC src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS -o /tmp/client_combined.o 2>/dev/null && ar rcs bin/linux/${{ matrix.variant }}/client/c_lib/libclient.a /tmp/client_combined.o || echo "Static lib build skipped"
+          gcc -c -fPIC src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS -o /tmp/server_combined.o 2>/dev/null && ar rcs bin/linux/${{ matrix.variant }}/server/c_lib/libserver.a /tmp/server_combined.o || echo "Static lib build skipped"
+          [ -f "bin/linux/${{ matrix.variant }}/client/libclient.so" ] || exit 1
+          [ -f "bin/linux/${{ matrix.variant }}/server/libserver.so" ] || exit 1
       - uses: actions/upload-artifact@v4
         with:
           name: binaries-linux-${{ matrix.arch }}
@@ -89,15 +90,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          mkdir -p bin/macos/${{ matrix.variant }}/lib bin/macos/${{ matrix.variant }}/c_lib bin/macos/${{ matrix.variant }}/include
+          mkdir -p bin/macos/${{ matrix.variant }}/client bin/macos/${{ matrix.variant }}/server
           HASH_SOURCES=$(find src/crypto -name "*.c" ! -name "main.c" | tr '\n' ' ')
           INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
-          gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/lib/libclient.dylib src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/lib/libserver.dylib src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          cp bin/macos/${{ matrix.variant }}/lib/libclient.dylib bin/macos/${{ matrix.variant }}/c_lib/
-          cp bin/macos/${{ matrix.variant }}/lib/libserver.dylib bin/macos/${{ matrix.variant }}/c_lib/
-          cp src/export.h bin/macos/${{ matrix.variant }}/include/
-          [ -f "bin/macos/${{ matrix.variant }}/lib/libclient.dylib" ] || exit 1
+          gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/client/libclient.dylib src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/server/libserver.dylib src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          # Try to build static libs for c_lib (optional)
+          mkdir -p bin/macos/${{ matrix.variant }}/client/c_lib bin/macos/${{ matrix.variant }}/server/c_lib || true
+          gcc -c -fPIC src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS -o /tmp/client_combined.o 2>/dev/null && ar rcs bin/macos/${{ matrix.variant }}/client/c_lib/libclient.a /tmp/client_combined.o || echo "Static lib build skipped"
+          gcc -c -fPIC src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS -o /tmp/server_combined.o 2>/dev/null && ar rcs bin/macos/${{ matrix.variant }}/server/c_lib/libserver.a /tmp/server_combined.o || echo "Static lib build skipped"
+          [ -f "bin/macos/${{ matrix.variant }}/client/libclient.dylib" ] || exit 1
       - uses: actions/upload-artifact@v4
         with:
           name: binaries-macos-${{ matrix.arch }}
@@ -125,7 +127,7 @@ jobs:
         with:
           ndk-version: r25c
       - run: |
-          mkdir -p bin/android/${{ matrix.variant }}/lib bin/android/${{ matrix.variant }}/c_lib bin/android/${{ matrix.variant }}/include
+          mkdir -p bin/android/${{ matrix.variant }}/client bin/android/${{ matrix.variant }}/server
           NDK=$ANDROID_NDK_ROOT
           TC=$NDK/toolchains/llvm/prebuilt/linux-x86_64
           CC_CMD=$TC/bin
@@ -137,12 +139,10 @@ jobs:
           esac
           HASH_SOURCES=$(find src/crypto -name "*.c" ! -name "main.c" | tr '\n' ' ')
           INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
-          $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/lib/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/lib/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          cp bin/android/${{ matrix.variant }}/lib/libclient.so bin/android/${{ matrix.variant }}/c_lib/
-          cp bin/android/${{ matrix.variant }}/lib/libserver.so bin/android/${{ matrix.variant }}/c_lib/
-          cp src/export.h bin/android/${{ matrix.variant }}/include/
-          [ -f "bin/android/${{ matrix.variant }}/lib/libclient.so" ] || exit 1
+          $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/client/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/server/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          # Static libs for Android typically not needed, skip c_lib
+          [ -f "bin/android/${{ matrix.variant }}/client/libclient.so" ] || exit 1
       - uses: actions/upload-artifact@v4
         with:
           name: binaries-android-${{ matrix.abi }}
@@ -158,10 +158,10 @@ jobs:
         with:
           version: '3.1.51'
       - run: |
-          mkdir -p bin/wasm/js bin/wasm/include
+          mkdir -p bin/wasm/client bin/wasm/server
           HASH_SOURCES=$(find src/crypto -name "*.c" ! -name "main.c" | tr '\n' ' ')
           INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
-          emcc src/client.c $HASH_SOURCES -o bin/wasm/js/client.js \
+          emcc src/client.c $HASH_SOURCES -o bin/wasm/client/client.js \
             -s EXPORTED_RUNTIME_METHODS='["cwrap", "ccall"]' \
             -s MODULARIZE=1 \
             -s EXPORT_NAME='ProofOfWorkClient' \
@@ -169,7 +169,7 @@ jobs:
             -s EXPORTED_FUNCTIONS='["_generate_pow_single", "_generate_pow_multi", "_get_hash_algo_by_name", "_malloc", "_free"]' \
             -Isrc $INCLUDE_DIRS \
             -O3
-          emcc src/server.c $HASH_SOURCES -o bin/wasm/js/server.js \
+          emcc src/server.c $HASH_SOURCES -o bin/wasm/server/server.js \
             -s EXPORTED_RUNTIME_METHODS='["cwrap", "ccall"]' \
             -s MODULARIZE=1 \
             -s EXPORT_NAME='ProofOfWorkServer' \
@@ -177,11 +177,10 @@ jobs:
             -s EXPORTED_FUNCTIONS='["_verify_pow_single", "_verify_pow_multi", "_get_hash_algo_by_name", "_malloc", "_free"]' \
             -Isrc $INCLUDE_DIRS \
             -O3
-          cp src/export.h bin/wasm/include/
-          [ -f "bin/wasm/js/client.js" ] || exit 1
-          [ -f "bin/wasm/js/client.wasm" ] || exit 1
-          [ -f "bin/wasm/js/server.js" ] || exit 1
-          [ -f "bin/wasm/js/server.wasm" ] || exit 1
+          [ -f "bin/wasm/client/client.js" ] || exit 1
+          [ -f "bin/wasm/client/client.wasm" ] || exit 1
+          [ -f "bin/wasm/server/server.js" ] || exit 1
+          [ -f "bin/wasm/server/server.wasm" ] || exit 1
       - uses: actions/upload-artifact@v4
         with:
           name: binaries-wasm
