@@ -27,24 +27,26 @@ Write-Host "=" -NoNewline; Write-Host ("=" * 79)
 Write-Host "`nBuilding for Windows $Variant-bit`n"
 
 # Define paths using variant parameter
-$libPath = ".\bin\win\$Variant\lib"
-$cLibPath = ".\bin\win\$Variant\c_lib"
-$includePath = ".\bin\win\$Variant\include"
+$clientLibPath = ".\bin\win\$Variant\client"
+$serverLibPath = ".\bin\win\$Variant\server"
+$clientCLibPath = ".\bin\win\$Variant\client\c_lib"
+$serverCLibPath = ".\bin\win\$Variant\server\c_lib"
 $src_dir = ".\src"
 $cryptoPath = "$src_dir\crypto"
 
 # Create directory structure if missing
-New-Item -ItemType Directory -Force -Path $libPath | Out-Null
-New-Item -ItemType Directory -Force -Path $cLibPath | Out-Null
-New-Item -ItemType Directory -Force -Path $includePath | Out-Null
+New-Item -ItemType Directory -Force -Path $clientLibPath | Out-Null
+New-Item -ItemType Directory -Force -Path $serverLibPath | Out-Null
+New-Item -ItemType Directory -Force -Path $clientCLibPath | Out-Null
+New-Item -ItemType Directory -Force -Path $serverCLibPath | Out-Null
 
 Write-Host "`nStep 1: Cleaning previous builds..."
 
 # Remove old DLLs and libs (if they exist)
-Remove-Item -Path "$libPath\client.dll" -ErrorAction SilentlyContinue
-Remove-Item -Path "$cLibPath\client.lib" -ErrorAction SilentlyContinue
-Remove-Item -Path "$libPath\server.dll" -ErrorAction SilentlyContinue
-Remove-Item -Path "$cLibPath\server.lib" -ErrorAction SilentlyContinue
+Remove-Item -Path "$clientLibPath\client.dll" -ErrorAction SilentlyContinue
+Remove-Item -Path "$clientCLibPath\client.lib" -ErrorAction SilentlyContinue
+Remove-Item -Path "$serverLibPath\server.dll" -ErrorAction SilentlyContinue
+Remove-Item -Path "$serverCLibPath\server.lib" -ErrorAction SilentlyContinue
 
 Write-Host "  OK Cleaned old builds"
 
@@ -131,7 +133,7 @@ Write-Host "  OK Configured $($includePaths.Count) include paths"
 Write-Host "`nStep 4: Building client.dll..."
 
 $clientSources = "$src_dir\client.c " + ($hashSources -join " ")
-$clientCmd = "gcc -shared -static-libgcc -o `"$libPath\client.dll`" $clientSources $includeFlags `"-Wl,--out-implib,$cLibPath\client.lib`""
+$clientCmd = "gcc -shared -static-libgcc -o `"$clientLibPath\client.dll`" $clientSources $includeFlags `"-Wl,--out-implib,$clientCLibPath\client.lib`""
 
 Write-Host "  Compiling..."
 $output = Invoke-Expression $clientCmd 2>&1
@@ -142,8 +144,8 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-if (Test-Path "$libPath\client.dll") {
-    $size = (Get-Item "$libPath\client.dll").Length / 1KB
+if (Test-Path "$clientLibPath\client.dll") {
+    $size = (Get-Item "$clientLibPath\client.dll").Length / 1KB
     Write-Host (("  OK client.dll built successfully ({0})" -f [math]::Round($size,2)) + " KB") -ForegroundColor Green
 } else {
     Write-Host "  ERROR: client.dll not found after build" -ForegroundColor Red
@@ -154,7 +156,7 @@ if (Test-Path "$libPath\client.dll") {
 Write-Host "`nStep 5: Building server.dll..."
 
 $serverSources = "$src_dir\server.c " + ($hashSources -join " ")
-$serverCmd = "gcc -shared -static-libgcc -o `"$libPath\server.dll`" $serverSources $includeFlags `"-Wl,--out-implib,$cLibPath\server.lib`""
+$serverCmd = "gcc -shared -static-libgcc -o `"$serverLibPath\server.dll`" $serverSources $includeFlags `"-Wl,--out-implib,$serverCLibPath\server.lib`""
 
 Write-Host "  Compiling..."
 $output = Invoke-Expression $serverCmd 2>&1
@@ -165,18 +167,16 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-if (Test-Path "$libPath\server.dll") {
-    $size = (Get-Item "$libPath\server.dll").Length / 1KB
+if (Test-Path "$serverLibPath\server.dll") {
+    $size = (Get-Item "$serverLibPath\server.dll").Length / 1KB
     Write-Host (("  OK server.dll built successfully ({0})" -f [math]::Round($size,2)) + " KB") -ForegroundColor Green
 } else {
     Write-Host "  ERROR: server.dll not found after build" -ForegroundColor Red
     exit 1
 }
 
-# Copy export header
-Write-Host "`nStep 6: Copying headers..."
-Copy-Item "$src_dir\export.h" "$includePath\" -Force
-Write-Host "  OK Copied export.h to include/"
+# Remove header copying step - users should get it from source
+Write-Host "`nStep 6: Build complete (headers available in src/export.h)"
 
 
 ################################################################################
@@ -211,14 +211,13 @@ try {
         Write-Host "BUILD AND TEST SUCCESSFUL!" -ForegroundColor Green
         Write-Host ("=" * 80)
         Write-Host "`nBuilt libraries:"
-        Write-Host "  Runtime (lib/):"
-        Write-Host "    - $libPath\client.dll"
-        Write-Host "    - $libPath\server.dll"
-        Write-Host "  C Development (c_lib/):"
-        Write-Host "    - $cLibPath\client.lib"
-        Write-Host "    - $cLibPath\server.lib"
-        Write-Host "  Headers (include/):"
-        Write-Host "    - $includePath\export.h"
+        Write-Host "  Client:"
+        Write-Host "    - Runtime: $clientLibPath\client.dll"
+        Write-Host "    - C Library: $clientCLibPath\client.lib"
+        Write-Host "  Server:"
+        Write-Host "    - Runtime: $serverLibPath\server.dll"
+        Write-Host "    - C Library: $serverCLibPath\server.lib"
+        Write-Host "  Headers: src\export.h (use from source)"
         Write-Host "`nPython utilities:"
         Write-Host "  - pow_utils_client.py"
         Write-Host "  - pow_utils_server.py"
