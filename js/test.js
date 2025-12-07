@@ -10,25 +10,26 @@ const path = require('path');
 function testWasm() {
   console.log('\n=== WASM Binary Test ===\n');
 
-  const wasmDir = path.join(__dirname, '..', 'bin', 'wasm', 'js');
+  const wasmClientDir = path.join(__dirname, '..', 'bin', 'wasm', 'client');
+  const wasmServerDir = path.join(__dirname, '..', 'bin', 'wasm', 'server');
   const files = [
-    'client.js',
-    'client.wasm',
-    'server.js',
-    'server.wasm'
+    { dir: wasmClientDir, name: 'client.js' },
+    { dir: wasmClientDir, name: 'client.wasm' },
+    { dir: wasmServerDir, name: 'server.js' },
+    { dir: wasmServerDir, name: 'server.wasm' }
   ];
 
   let allPass = true;
 
   // Check file existence and sizes
-  files.forEach(filename => {
-    const filepath = path.join(wasmDir, filename);
+  files.forEach(file => {
+    const filepath = path.join(file.dir, file.name);
     if (fs.existsSync(filepath)) {
       const stats = fs.statSync(filepath);
       const sizeMB = (stats.size / 1024 / 1024).toFixed(2);
-      console.log(`[OK] ${filename.padEnd(15)} (${sizeMB} MB)`);
+      console.log(`[OK] ${file.name.padEnd(15)} (${sizeMB} MB)`);
     } else {
-      console.log(`[FAIL] ${filename} - NOT FOUND`);
+      console.log(`[FAIL] ${file.name} - NOT FOUND`);
       allPass = false;
     }
   });
@@ -40,8 +41,8 @@ function testWasm() {
 
   // Basic module loading test
   try {
-    const clientPath = path.join(wasmDir, 'client.js');
-    const serverPath = path.join(wasmDir, 'server.js');
+    const clientPath = path.join(wasmClientDir, 'client.js');
+    const serverPath = path.join(wasmServerDir, 'server.js');
     
     // Just verify they can be required (syntax check)
     require(clientPath);
