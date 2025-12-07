@@ -86,10 +86,15 @@ The CI pipeline automatically attempts to build for all supported platforms on e
 ### Python Client (Generate PoW)
 
 ```python
+import os
 from python.utils_client import PoWClient, create_multi_pow_challenge
 
-# Initialize client (loads DLL automatically)
-client = PoWClient()
+# Path to the compiled Client DLL (adjust path as needed)
+# e.g., "bin/win/64/dll/client.dll" or "bin/linux/64/libclient.so"
+client_dll_path = "path/to/client.dll"
+
+# Initialize client with explicit DLL path
+client = PoWClient(dll_path=client_dll_path)
 
 # 1. Single Hash PoW
 # Find a nonce for "hello world" using SHA2-256 with 12 bits of difficulty
@@ -109,9 +114,15 @@ if result['success']:
 ### Python Server (Verify PoW)
 
 ```python
+import os
 from python.utils_server import PoWServer
 
-server = PoWServer()
+# Path to the compiled Server DLL (adjust path as needed)
+# e.g., "bin/win/64/dll/server.dll" or "bin/linux/64/libserver.so"
+server_dll_path = "path/to/server.dll"
+
+# Initialize server with explicit DLL path
+server = PoWServer(dll_path=server_dll_path)
 
 # Verify the single hash result
 is_valid = server.verify_single(
