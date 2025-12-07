@@ -1,5 +1,7 @@
 # Proof-of-Work (PoW) System
 
+<div align="center">
+
 ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
 ![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white)
@@ -10,6 +12,11 @@
 ![Language Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Language JS](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![License](https://img.shields.io/badge/License-AGPL%20v3-blue?style=for-the-badge)
+
+[![Benchmakr](https://img.shields.io/badge/Benchmark-FF0000?style=for-the-badge&logo=Benchmark&logoColor=white)](https://qudslab.com/r/Proof-of-work/)
+
+</div>
+
 
 A high-performance, cross-platform Proof-of-Work system implemented in C with bindings for **Python**, **JavaScript**, and **WebAssembly**. It supports **34 cryptographic hash algorithms** and features a unique **Multi-Hash PoW** mechanism for enhanced security.
 
