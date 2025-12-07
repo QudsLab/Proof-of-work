@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Generate binary metadata (JSON and Markdown) for multi-platform builds.
-Organizes binaries into bin/{os}/{variant}/ and creates manifest files.
+Organizes binaries into bin/{os}/{variant}/client/ and bin/{os}/{variant}/server/
+Creates separate binaries.json (runtime) and c_lib.json (development libs).
 """
 
 import os
@@ -36,7 +37,8 @@ def main():
         'wasm': {'wasm': 'wasm'}
     }
     
-    binary_info = {}
+    runtime_binaries = {}
+    c_lib_binaries = {}
     
     # Process each artifact directory
     for artifact_dir in sorted(artifacts_dir.glob('binaries-*')):
@@ -70,10 +72,11 @@ def main():
         
         target_dir.mkdir(parents=True, exist_ok=True)
         
-        # Copy files and collect hashes
+        # Copy files and collect metadata
         platform_key = f"{os_name}/{variant}"
-        if platform_key not in binary_info:
-            binary_info[platform_key] = []
+        if platform_key not in runtime_binaries:
+            runtime_binaries[platform_key] = {'client': [], 'server': []}
+            c_lib_binaries[platform_key] = {'client': [], 'server': []}
         
         for file_path in artifact_dir.rglob('*'):
             if not file_path.is_file():
@@ -101,29 +104,36 @@ def main():
             
             github_url = f"{GITHUB_RAW_BASE}/{quote(github_path)}"
             
-            # Determine file category
-            file_category = "runtime"
-            if "c_lib" in str(rel_path):
-                file_category = "c_development"
-            elif "include" in str(rel_path):
-                file_category = "headers"
-            elif file_path.suffix in ['.js']:
-                file_category = "javascript"
+            # Determine if c_lib or runtime
+            is_c_lib = "c_lib" in str(rel_path)
             
-            binary_info[platform_key].append({
-                'filename': file_path.name,
-                'category': file_category,
-                'path': str(rel_path),
+            # Determine client or server based on filename
+            filename_lower = file_path.name.lower()
+            if 'client' in filename_lower:
+                target_type = 'client'
+            elif 'server' in filename_lower:
+                target_type = 'server'
+            else:
+                # For other files like headers or JS glue, skip for now
+                continue
+            
+            # Compact metadata format (no filename, category, or path)
+            file_metadata = {
                 'size': len(file_content),
                 'url': github_url,
                 'hashes': {
                     'md5': md5_hash,
                     'sha256': sha256_hash
                 }
-            })
+            }
+            
+            if is_c_lib:
+                c_lib_binaries[platform_key][target_type].append(file_metadata)
+            else:
+                runtime_binaries[platform_key][target_type].append(file_metadata)
     
-    # Generate binaries.json
-    metadata = {
+    # Generate binaries.json (runtime libraries)
+    runtime_metadata = {
         'version': '1.0.0',
         'repository': f"https://github.com/{GITHUB_REPO}",
         'generated': datetime.utcnow().isoformat() + 'Z',
@@ -131,21 +141,43 @@ def main():
     }
     
     # Organize by platform
-    for platform_key in sorted(binary_info.keys()):
+    for platform_key in sorted(runtime_binaries.keys()):
         os_name, variant = platform_key.split('/')
         
-        if os_name not in metadata['platforms']:
-            metadata['platforms'][os_name] = {}
+        if os_name not in runtime_metadata['platforms']:
+            runtime_metadata['platforms'][os_name] = {}
         
-        metadata['platforms'][os_name][variant] = {
-            'files': binary_info[platform_key],
-            'count': len(binary_info[platform_key])
-        }
+        runtime_metadata['platforms'][os_name][variant] = runtime_binaries[platform_key]
     
     json_path = bin_dir / 'binaries.json'
-    json_path.write_text(json.dumps(metadata, indent=2, sort_keys=False))
-    total_files = sum(len(files) for files in binary_info.values())
-    print(f"✓ Generated {json_path} with {total_files} entries")
+    json_path.write_text(json.dumps(runtime_metadata, indent=2, sort_keys=False))
+    runtime_count = sum(len(v['client']) + len(v['server']) for v in runtime_binaries.values())
+    print(f"✓ Generated {json_path} with {runtime_count} runtime binaries")
+    
+    # Generate c_lib.json (development libraries - rare cases)
+    c_lib_metadata = {
+        'version': '1.0.0',
+        'repository': f"https://github.com/{GITHUB_REPO}",
+        'generated': datetime.utcnow().isoformat() + 'Z',
+        'note': 'Development libraries for rare cases where static linking is needed',
+        'platforms': {}
+    }
+    
+    # Organize by platform
+    for platform_key in sorted(c_lib_binaries.keys()):
+        os_name, variant = platform_key.split('/')
+        
+        if os_name not in c_lib_metadata['platforms']:
+            c_lib_metadata['platforms'][os_name] = {}
+        
+        # Only add if c_lib files exist
+        if c_lib_binaries[platform_key]['client'] or c_lib_binaries[platform_key]['server']:
+            c_lib_metadata['platforms'][os_name][variant] = c_lib_binaries[platform_key]
+    
+    c_lib_json_path = bin_dir / 'c_lib.json'
+    c_lib_json_path.write_text(json.dumps(c_lib_metadata, indent=2, sort_keys=False))
+    c_lib_count = sum(len(v['client']) + len(v['server']) for v in c_lib_binaries.values())
+    print(f"✓ Generated {c_lib_json_path} with {c_lib_count} development libraries")
     
     # Generate README.md
     readme_lines = [
@@ -155,49 +187,34 @@ def main():
         f"**Generated**: {datetime.utcnow().strftime('%Y-%m-%d %H:%M UTC')}",
         "",
         "This directory contains pre-built binaries for multiple platforms.",
+        "",
+        "## Metadata Files",
+        "",
+        "- `binaries.json` - Runtime binaries (DLLs, .so, .dylib, .wasm)",
+        "- `c_lib.json` - Development libraries (for C/C++ linking)",
         ""
     ]
     
     # Summary table
     readme_lines.append("## Summary")
     readme_lines.append("")
-    readme_lines.append("| Platform | Variant | Files |")
-    readme_lines.append("|----------|---------|-------|")
+    readme_lines.append("| Platform | Variant | Client | Server |")
+    readme_lines.append("|----------|---------|--------|--------|")
     
     for os_name in ['windows', 'linux', 'macos', 'android', 'wasm']:
-        platforms = sorted([k for k in binary_info.keys() if k.startswith(os_name)])
+        platforms = sorted([k for k in runtime_binaries.keys() if k.startswith(os_name)])
         for platform_key in platforms:
             variant = platform_key.split('/')[1]
-            file_count = len(binary_info[platform_key])
-            readme_lines.append(f"| {os_name.title()} | {variant} | {file_count} |")
+            client_count = len(runtime_binaries[platform_key]['client'])
+            server_count = len(runtime_binaries[platform_key]['server'])
+            readme_lines.append(f"| {os_name.title()} | {variant} | {client_count} | {server_count} |")
     
     readme_lines.append("")
-    readme_lines.append("## Download Links & Checksums")
+    readme_lines.append("## Download Links")
     readme_lines.append("")
-    
-    # Detailed sections with download links
-    for os_name in ['windows', 'linux', 'macos', 'android', 'wasm']:
-        platforms = sorted([k for k in binary_info.keys() if k.startswith(os_name)])
-        if platforms:
-            readme_lines.append(f"### {os_name.title()}")
-            readme_lines.append("")
-            
-            for platform_key in platforms:
-                variant = platform_key.split('/')[1]
-                readme_lines.append(f"#### {variant}")
-                readme_lines.append("")
-                
-                for file_info in binary_info[platform_key]:
-                    filename = file_info['filename']
-                    url = file_info['url']
-                    sha256 = file_info['hashes']['sha256']
-                    md5 = file_info['hashes']['md5']
-                    size = file_info['size']
-                    
-                    readme_lines.append(f"- **[{filename}]({url})** ({size:,} bytes)")
-                    readme_lines.append(f"  - SHA256: `{sha256}`")
-                    readme_lines.append(f"  - MD5: `{md5}`")
-                    readme_lines.append("")
+    readme_lines.append("All binaries are available via direct GitHub raw URLs.")
+    readme_lines.append("See `binaries.json` and `c_lib.json` for complete download links and checksums.")
+    readme_lines.append("")
     
     # Usage instructions
     readme_lines.extend([
@@ -206,13 +223,13 @@ def main():
         "### Download via curl",
         "```bash",
         "# Example: Download Windows x64 client DLL",
-        f"curl -O {GITHUB_RAW_BASE}/bin/win/64/dll/client.dll",
+        f"curl -O {GITHUB_RAW_BASE}/bin/win/64/client/client.dll",
         "```",
         "",
         "### Download via wget",
         "```bash",
         "# Example: Download Linux x64 client library",
-        f"wget {GITHUB_RAW_BASE}/bin/linux/64/lib/libclient.so",
+        f"wget {GITHUB_RAW_BASE}/bin/linux/64/client/libclient.so",
         "```",
         "",
         "### Verify checksums",
@@ -224,6 +241,21 @@ def main():
         "# Windows PowerShell",
         "Get-FileHash client.dll -Algorithm SHA256",
         "Get-FileHash client.dll -Algorithm MD5",
+        "```",
+        "",
+        "## Structure",
+        "",
+        "```",
+        "bin/",
+        "├── binaries.json (runtime binaries metadata)",
+        "├── c_lib.json (development libraries metadata)",
+        "├── README.md",
+        "└── {os}/",
+        "    └── {variant}/",
+        "        ├── client/",
+        "        │   └── [runtime files]",
+        "        └── server/",
+        "            └── [runtime files]",
         "```",
         ""
     ])
