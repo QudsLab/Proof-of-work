@@ -27,17 +27,20 @@ if len(sys.argv) > 1:
 
 # Determine library paths based on OS
 if OS__TYPE == "win":
-    BIN_PATH = BASE_DIR / "bin" / "win" / VARIANT / "lib"
-    SERVER_DLL = str(BIN_PATH / "server.dll")
-    CLIENT_DLL = str(BIN_PATH / "client.dll")
+    BIN_PATH_CLIENT = BASE_DIR / "bin" / "win" / VARIANT / "client"
+    BIN_PATH_SERVER = BASE_DIR / "bin" / "win" / VARIANT / "server"
+    SERVER_DLL = str(BIN_PATH_SERVER / "server.dll")
+    CLIENT_DLL = str(BIN_PATH_CLIENT / "client.dll")
 elif OS__TYPE == "linux":
-    BIN_PATH = BASE_DIR / "bin" / "linux" / VARIANT / "lib"
-    SERVER_DLL = str(BIN_PATH / "libserver.so")
-    CLIENT_DLL = str(BIN_PATH / "libclient.so")
+    BIN_PATH_CLIENT = BASE_DIR / "bin" / "linux" / VARIANT / "client"
+    BIN_PATH_SERVER = BASE_DIR / "bin" / "linux" / VARIANT / "server"
+    SERVER_DLL = str(BIN_PATH_SERVER / "libserver.so")
+    CLIENT_DLL = str(BIN_PATH_CLIENT / "libclient.so")
 elif OS__TYPE == "macos":
-    BIN_PATH = BASE_DIR / "bin" / "macos" / VARIANT / "lib"
-    SERVER_DLL = str(BIN_PATH / "libserver.dylib")
-    CLIENT_DLL = str(BIN_PATH / "libclient.dylib")
+    BIN_PATH_CLIENT = BASE_DIR / "bin" / "macos" / VARIANT / "client"
+    BIN_PATH_SERVER = BASE_DIR / "bin" / "macos" / VARIANT / "server"
+    SERVER_DLL = str(BIN_PATH_SERVER / "libserver.dylib")
+    CLIENT_DLL = str(BIN_PATH_CLIENT / "libclient.dylib")
 else:
     print(f"ERROR: Unknown OS type '{OS__TYPE}'")
     sys.exit(1)
