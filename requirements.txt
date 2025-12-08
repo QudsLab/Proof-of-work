@@ -1,0 +1,7 @@
+# Proof-of-Work Python Dependencies
+# All core dependencies are part of Python standard library
+# No external packages required
+
+# Development/Testing (optional)
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
