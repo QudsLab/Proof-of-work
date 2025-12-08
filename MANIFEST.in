@@ -1,0 +1,6 @@
+include README.md
+include LICENSE
+include requirements.txt
+recursive-include src *.c *.h
+recursive-include python *.py
+include .github/workflows/build-binaries.yml

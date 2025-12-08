@@ -34,6 +34,14 @@
         "documentation": {}
     },
     {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
         "label": "PoWClient",
         "importPath": "utils_client",
         "description": "utils_client",
@@ -90,6 +98,22 @@
         "description": "datetime",
         "isExtraImport": true,
         "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "setup",
+        "importPath": "setuptools",
+        "description": "setuptools",
+        "isExtraImport": true,
+        "detail": "setuptools",
+        "documentation": {}
+    },
+    {
+        "label": "find_packages",
+        "importPath": "setuptools",
+        "description": "setuptools",
+        "isExtraImport": true,
+        "detail": "setuptools",
         "documentation": {}
     },
     {
@@ -342,6 +366,24 @@
         "description": "generate_metadata",
         "peekOfCode": "def main():\n    \"\"\"Generate metadata for downloaded binaries.\"\"\"\n    artifacts_dir = Path('downloaded-artifacts')\n    bin_dir = Path('bin')\n    bin_dir.mkdir(exist_ok=True)\n    # Map build names to platform/variant paths\n    platform_map = {\n        'windows': {'x64': '64', 'x86': '32'},\n        'linux': {'x86_64': '64', 'aarch64': 'arm64'},\n        'macos': {'x86_64': '64', 'arm64': 'arm64'},",
         "detail": "generate_metadata",
+        "documentation": {}
+    },
+    {
+        "label": "readme_path",
+        "kind": 5,
+        "importPath": "setup",
+        "description": "setup",
+        "peekOfCode": "readme_path = Path(__file__).parent / \"README.md\"\nlong_description = readme_path.read_text(encoding=\"utf-8\") if readme_path.exists() else \"\"\nsetup(\n    name=\"proof-of-work\",\n    version=\"1.0.0\",\n    description=\"High-performance Proof-of-Work library with support for 34 hash algorithms\",\n    long_description=long_description,\n    long_description_content_type=\"text/markdown\",\n    author=\"QudsLab\",\n    author_email=\"contact@qudslab.com\",",
+        "detail": "setup",
+        "documentation": {}
+    },
+    {
+        "label": "long_description",
+        "kind": 5,
+        "importPath": "setup",
+        "description": "setup",
+        "peekOfCode": "long_description = readme_path.read_text(encoding=\"utf-8\") if readme_path.exists() else \"\"\nsetup(\n    name=\"proof-of-work\",\n    version=\"1.0.0\",\n    description=\"High-performance Proof-of-Work library with support for 34 hash algorithms\",\n    long_description=long_description,\n    long_description_content_type=\"text/markdown\",\n    author=\"QudsLab\",\n    author_email=\"contact@qudslab.com\",\n    url=\"https://github.com/QudsLab/Proof-of-work\",",
+        "detail": "setup",
         "documentation": {}
     }
 ]
