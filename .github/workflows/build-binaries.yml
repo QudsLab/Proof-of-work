@@ -3,7 +3,6 @@ name: Build Multi-Platform Binaries
 on:
   push:
     branches: [main]
-    paths: ['src/**', 'python/**', 'build_win64.ps1', '.github/workflows/build-binaries.yml']
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
@@ -30,11 +29,11 @@ jobs:
           python-version: '3.11'
       - run: choco install mingw -y --no-progress
       - run: gcc --version
-      - run: .\build_win64.ps1
+      - run: .\build_win64.ps1 -Variant ${{ matrix.variant }}
         shell: pwsh
       - run: |
-          if (!(Test-Path ".\bin\win\${{ matrix.variant }}\dll\client.dll")) { exit 1 }
-          if (!(Test-Path ".\bin\win\${{ matrix.variant }}\dll\server.dll")) { exit 1 }
+          if (!(Test-Path ".\bin\win\${{ matrix.variant }}\client\client.dll")) { exit 1 }
+          if (!(Test-Path ".\bin\win\${{ matrix.variant }}\server\server.dll")) { exit 1 }
         shell: pwsh
       - uses: actions/upload-artifact@v4
         with:
@@ -58,13 +57,17 @@ jobs:
       - run: |
           sudo apt-get update
           sudo apt-get install -y build-essential
-          mkdir -p bin/linux/${{ matrix.variant }}/lib bin/linux/${{ matrix.variant }}/include
-          HASH_SOURCES=$(find src/crypto -name "*.c" | tr '\n' ' ')
+          mkdir -p bin/linux/${{ matrix.variant }}/client bin/linux/${{ matrix.variant }}/server
+          HASH_SOURCES=$(find src/crypto -name "*.c" ! -name "main.c" | tr '\n' ' ')
           INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
-          gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/lib/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/lib/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          cp src/export.h bin/linux/${{ matrix.variant }}/include/
-          [ -f "bin/linux/${{ matrix.variant }}/lib/libclient.so" ] || exit 1
+          gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/client/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          gcc -shared -fPIC -o bin/linux/${{ matrix.variant }}/server/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          # Try to build static libs for c_lib (optional)
+          mkdir -p bin/linux/${{ matrix.variant }}/client/c_lib bin/linux/${{ matrix.variant }}/server/c_lib || true
+          gcc -c -fPIC src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS -o /tmp/client_combined.o 2>/dev/null && ar rcs bin/linux/${{ matrix.variant }}/client/c_lib/libclient.a /tmp/client_combined.o || echo "Static lib build skipped"
+          gcc -c -fPIC src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS -o /tmp/server_combined.o 2>/dev/null && ar rcs bin/linux/${{ matrix.variant }}/server/c_lib/libserver.a /tmp/server_combined.o || echo "Static lib build skipped"
+          [ -f "bin/linux/${{ matrix.variant }}/client/libclient.so" ] || exit 1
+          [ -f "bin/linux/${{ matrix.variant }}/server/libserver.so" ] || exit 1
       - uses: actions/upload-artifact@v4
         with:
           name: binaries-linux-${{ matrix.arch }}
@@ -87,13 +90,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          mkdir -p bin/macos/${{ matrix.variant }}/lib bin/macos/${{ matrix.variant }}/include
-          HASH_SOURCES=$(find src/crypto -name "*.c" | tr '\n' ' ')
+          mkdir -p bin/macos/${{ matrix.variant }}/client bin/macos/${{ matrix.variant }}/server
+          HASH_SOURCES=$(find src/crypto -name "*.c" ! -name "main.c" | tr '\n' ' ')
           INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
-          gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/lib/libclient.dylib src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/lib/libserver.dylib src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          cp src/export.h bin/macos/${{ matrix.variant }}/include/
-          [ -f "bin/macos/${{ matrix.variant }}/lib/libclient.dylib" ] || exit 1
+          gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/client/libclient.dylib src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          gcc -dynamiclib -fPIC -o bin/macos/${{ matrix.variant }}/server/libserver.dylib src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          # Try to build static libs for c_lib (optional)
+          mkdir -p bin/macos/${{ matrix.variant }}/client/c_lib bin/macos/${{ matrix.variant }}/server/c_lib || true
+          gcc -c -fPIC src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS -o /tmp/client_combined.o 2>/dev/null && ar rcs bin/macos/${{ matrix.variant }}/client/c_lib/libclient.a /tmp/client_combined.o || echo "Static lib build skipped"
+          gcc -c -fPIC src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS -o /tmp/server_combined.o 2>/dev/null && ar rcs bin/macos/${{ matrix.variant }}/server/c_lib/libserver.a /tmp/server_combined.o || echo "Static lib build skipped"
+          [ -f "bin/macos/${{ matrix.variant }}/client/libclient.dylib" ] || exit 1
       - uses: actions/upload-artifact@v4
         with:
           name: binaries-macos-${{ matrix.arch }}
@@ -121,7 +127,7 @@ jobs:
         with:
           ndk-version: r25c
       - run: |
-          mkdir -p bin/android/${{ matrix.variant }}/lib bin/android/${{ matrix.variant }}/include
+          mkdir -p bin/android/${{ matrix.variant }}/client bin/android/${{ matrix.variant }}/server
           NDK=$ANDROID_NDK_ROOT
           TC=$NDK/toolchains/llvm/prebuilt/linux-x86_64
           CC_CMD=$TC/bin
@@ -131,23 +137,123 @@ jobs:
             x86) CC=$CC_CMD/i686-linux-android21-clang;;
             x86_64) CC=$CC_CMD/x86_64-linux-android21-clang;;
           esac
-          HASH_SOURCES=$(find src/crypto -name "*.c" | tr '\n' ' ')
+          HASH_SOURCES=$(find src/crypto -name "*.c" ! -name "main.c" | tr '\n' ' ')
           INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
-          $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/lib/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/lib/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
-          cp src/export.h bin/android/${{ matrix.variant }}/include/
-          [ -f "bin/android/${{ matrix.variant }}/lib/libclient.so" ] || exit 1
+          $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/client/libclient.so src/client.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          $CC -shared -fPIC -o bin/android/${{ matrix.variant }}/server/libserver.so src/server.c $HASH_SOURCES -Isrc $INCLUDE_DIRS
+          # Static libs for Android typically not needed, skip c_lib
+          [ -f "bin/android/${{ matrix.variant }}/client/libclient.so" ] || exit 1
       - uses: actions/upload-artifact@v4
         with:
           name: binaries-android-${{ matrix.abi }}
           path: bin/android/${{ matrix.variant }}/
           retention-days: 1
 
+  build_wasm:
+    name: Build WebAssembly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: '3.1.51'
+      - run: |
+          mkdir -p bin/wasm/client bin/wasm/server
+          HASH_SOURCES=$(find src/crypto -name "*.c" ! -name "main.c" | tr '\n' ' ')
+          INCLUDE_DIRS=$(find src/crypto -type d | sed 's/^/-I/' | tr '\n' ' ')
+          emcc src/client.c $HASH_SOURCES -o bin/wasm/client/client.js \
+            -s EXPORTED_RUNTIME_METHODS='["cwrap", "ccall"]' \
+            -s MODULARIZE=1 \
+            -s EXPORT_NAME='ProofOfWorkClient' \
+            -s ALLOW_MEMORY_GROWTH=1 \
+            -s EXPORTED_FUNCTIONS='["_generate_pow_single", "_generate_pow_multi", "_get_hash_algo_by_name", "_malloc", "_free"]' \
+            -Isrc $INCLUDE_DIRS \
+            -O3
+          emcc src/server.c $HASH_SOURCES -o bin/wasm/server/server.js \
+            -s EXPORTED_RUNTIME_METHODS='["cwrap", "ccall"]' \
+            -s MODULARIZE=1 \
+            -s EXPORT_NAME='ProofOfWorkServer' \
+            -s ALLOW_MEMORY_GROWTH=1 \
+            -s EXPORTED_FUNCTIONS='["_verify_pow_single", "_verify_pow_multi", "_get_hash_algo_by_name", "_malloc", "_free"]' \
+            -Isrc $INCLUDE_DIRS \
+            -O3
+          [ -f "bin/wasm/client/client.js" ] || exit 1
+          [ -f "bin/wasm/client/client.wasm" ] || exit 1
+          [ -f "bin/wasm/server/server.js" ] || exit 1
+          [ -f "bin/wasm/server/server.wasm" ] || exit 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: binaries-wasm
+          path: bin/wasm/
+          retention-days: 1
+
+  test_windows:
+    name: Test Windows Binaries
+    needs: build_windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: binaries-windows-x64
+          path: bin/win/64/
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: python python/main.py win 64
+        shell: pwsh
+        env:
+          PYTHONIOENCODING: utf-8
+
+  test_linux:
+    name: Test Linux Binaries
+    needs: build_linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: binaries-linux-x86_64
+          path: bin/linux/64/
+      - run: python3 python/main.py linux 64
+
+  test_macos:
+    name: Test macOS Binaries
+    needs: build_macos
+    runs-on: macos-13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: binaries-macos-x86_64
+          path: bin/macos/64/
+      - run: python3 python/main.py macos 64
+
+  test_wasm:
+    name: Test WebAssembly
+    needs: build_wasm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: binaries-wasm
+          path: bin/wasm/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: |
+          if [ -f "js/test.js" ]; then
+            node js/test.js
+          else
+            echo "⚠ No WASM test found, skipping"
+          fi
+
   organize_and_commit:
     name: Organize & Commit Binaries
-    needs: [build_windows, build_linux, build_macos, build_android]
+    needs: [build_windows, build_linux, build_macos, build_android, build_wasm, test_windows, test_linux, test_macos, test_wasm]
     runs-on: ubuntu-latest
-    if: always() && (needs.build_windows.result == 'success' || needs.build_linux.result == 'success' || needs.build_macos.result == 'success' || needs.build_android.result == 'success')
+    if: always() && (needs.build_windows.result == 'success' || needs.build_linux.result == 'success' || needs.build_macos.result == 'success' || needs.build_android.result == 'success' || needs.build_wasm.result == 'success')
     steps:
       - uses: actions/checkout@v4
         with:
@@ -159,20 +265,20 @@ jobs:
         with:
           python-version: '3.11'
       - run: python3 generate_metadata.py
-      - run: find bin -type f | head -20
+      - run: find bin -type f | head -30
       - run: git config user.email "bot@github.com" && git config user.name "GitHub Bot"
       - run: |
           git add bin/
           if ! git diff --staged --quiet; then
-            cnt=$(find bin -type f \( -name "*.dll" -o -name "*.so" -o -name "*.dylib" \) | wc -l)
-            git commit -m "Build: Add $cnt binaries" -m "Run: ${{ github.run_id }}"
+            cnt=$(find bin -type f \( -name "*.dll" -o -name "*.so" -o -name "*.dylib" -o -name "*.wasm" -o -name "*.js" \) | wc -l)
+            git commit -m "Build: Add $cnt binaries [skip ci]" -m "Run: ${{ github.run_id }}"
             git pull --rebase origin main || true
             git push origin main
           fi
 
   report:
     name: Build Report
-    needs: [build_windows, build_linux, build_macos, build_android, organize_and_commit]
+    needs: [build_windows, build_linux, build_macos, build_android, build_wasm, test_windows, test_linux, test_macos, test_wasm, organize_and_commit]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -184,4 +290,9 @@ jobs:
           echo "| Linux | ${{ needs.build_linux.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| macOS | ${{ needs.build_macos.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Android | ${{ needs.build_android.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| WASM | ${{ needs.build_wasm.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test Windows | ${{ needs.test_windows.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test Linux | ${{ needs.test_linux.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test macOS | ${{ needs.test_macos.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test WASM | ${{ needs.test_wasm.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Commit | ${{ needs.organize_and_commit.result }} |" >> $GITHUB_STEP_SUMMARY

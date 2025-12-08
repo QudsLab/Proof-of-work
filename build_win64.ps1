@@ -1,6 +1,11 @@
 # Enhanced Proof-of-Work Build Script
 # Builds client and server DLLs with all hash algorithm support
 
+param(
+    [Parameter(Mandatory=$false)]
+    [string]$Variant = "64"
+)
+
 ################################################################################
 ################################################################################
 ###                                                                          ###
@@ -19,24 +24,29 @@
 Write-Host "=" -NoNewline; Write-Host ("=" * 79)
 Write-Host "Enhanced Proof-of-Work Build System"
 Write-Host "=" -NoNewline; Write-Host ("=" * 79)
+Write-Host "`nBuilding for Windows $Variant-bit`n"
 
-# Define paths
-$libPath = ".\bin\win\64\lib"
-$dllPath = ".\bin\win\64\dll"
+# Define paths using variant parameter
+$clientLibPath = ".\bin\win\$Variant\client"
+$serverLibPath = ".\bin\win\$Variant\server"
+$clientCLibPath = ".\bin\win\$Variant\client\c_lib"
+$serverCLibPath = ".\bin\win\$Variant\server\c_lib"
 $src_dir = ".\src"
 $cryptoPath = "$src_dir\crypto"
 
 # Create directory structure if missing
-New-Item -ItemType Directory -Force -Path $libPath | Out-Null
-New-Item -ItemType Directory -Force -Path $dllPath | Out-Null
+New-Item -ItemType Directory -Force -Path $clientLibPath | Out-Null
+New-Item -ItemType Directory -Force -Path $serverLibPath | Out-Null
+New-Item -ItemType Directory -Force -Path $clientCLibPath | Out-Null
+New-Item -ItemType Directory -Force -Path $serverCLibPath | Out-Null
 
 Write-Host "`nStep 1: Cleaning previous builds..."
 
 # Remove old DLLs and libs (if they exist)
-Remove-Item -Path "$dllPath\client.dll" -ErrorAction SilentlyContinue
-Remove-Item -Path "$libPath\client.lib" -ErrorAction SilentlyContinue
-Remove-Item -Path "$dllPath\server.dll" -ErrorAction SilentlyContinue
-Remove-Item -Path "$libPath\server.lib" -ErrorAction SilentlyContinue
+Remove-Item -Path "$clientLibPath\client.dll" -ErrorAction SilentlyContinue
+Remove-Item -Path "$clientCLibPath\client.lib" -ErrorAction SilentlyContinue
+Remove-Item -Path "$serverLibPath\server.dll" -ErrorAction SilentlyContinue
+Remove-Item -Path "$serverCLibPath\server.lib" -ErrorAction SilentlyContinue
 
 Write-Host "  OK Cleaned old builds"
 
@@ -123,7 +133,7 @@ Write-Host "  OK Configured $($includePaths.Count) include paths"
 Write-Host "`nStep 4: Building client.dll..."
 
 $clientSources = "$src_dir\client.c " + ($hashSources -join " ")
-$clientCmd = "gcc -shared -static-libgcc -o `"$dllPath\client.dll`" $clientSources $includeFlags `"-Wl,--out-implib,$libPath\client.lib`""
+$clientCmd = "gcc -shared -static-libgcc -o `"$clientLibPath\client.dll`" $clientSources $includeFlags `"-Wl,--out-implib,$clientCLibPath\client.lib`""
 
 Write-Host "  Compiling..."
 $output = Invoke-Expression $clientCmd 2>&1
@@ -134,8 +144,8 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-if (Test-Path "$dllPath\client.dll") {
-    $size = (Get-Item "$dllPath\client.dll").Length / 1KB
+if (Test-Path "$clientLibPath\client.dll") {
+    $size = (Get-Item "$clientLibPath\client.dll").Length / 1KB
     Write-Host (("  OK client.dll built successfully ({0})" -f [math]::Round($size,2)) + " KB") -ForegroundColor Green
 } else {
     Write-Host "  ERROR: client.dll not found after build" -ForegroundColor Red
@@ -146,7 +156,7 @@ if (Test-Path "$dllPath\client.dll") {
 Write-Host "`nStep 5: Building server.dll..."
 
 $serverSources = "$src_dir\server.c " + ($hashSources -join " ")
-$serverCmd = "gcc -shared -static-libgcc -o `"$dllPath\server.dll`" $serverSources $includeFlags `"-Wl,--out-implib,$libPath\server.lib`""
+$serverCmd = "gcc -shared -static-libgcc -o `"$serverLibPath\server.dll`" $serverSources $includeFlags `"-Wl,--out-implib,$serverCLibPath\server.lib`""
 
 Write-Host "  Compiling..."
 $output = Invoke-Expression $serverCmd 2>&1
@@ -157,13 +167,16 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-if (Test-Path "$dllPath\server.dll") {
-    $size = (Get-Item "$dllPath\server.dll").Length / 1KB
+if (Test-Path "$serverLibPath\server.dll") {
+    $size = (Get-Item "$serverLibPath\server.dll").Length / 1KB
     Write-Host (("  OK server.dll built successfully ({0})" -f [math]::Round($size,2)) + " KB") -ForegroundColor Green
 } else {
     Write-Host "  ERROR: server.dll not found after build" -ForegroundColor Red
     exit 1
 }
+
+# Remove header copying step - users should get it from source
+Write-Host "`nStep 6: Build complete (headers available in src/export.h)"
 
 
 ################################################################################
@@ -182,26 +195,29 @@ if (Test-Path "$dllPath\server.dll") {
 
 $pythonPath = "python"
 # Run tests
-Write-Host "`nStep 6: Running test suite..."
+Write-Host "`nStep 7: Running test suite..."
 Write-Host "=" -NoNewline; Write-Host ("=" * 79)
 
 try {
-    # pass as 1st arg win and 2nd arg 64 to indicate platform
+    # pass as 1st arg win and 2nd arg variant to indicate platform
     Write-Host "=" -NoNewline; Write-Host ("=" * 79)
     Write-Host "  Running Python tests with command:"
-    Write-Host "    python `"$pythonPath/main.py`" win 64`n"
+    Write-Host "    python `"$pythonPath/main.py`" win $Variant`n"
     Write-Host "=" -NoNewline; Write-Host ("=" * 79)
-    python "$pythonPath/main.py" win 64
+    python "$pythonPath/main.py" win $Variant
     Write-Host "=" -NoNewline; Write-Host ("=" * 79)
     if ($LASTEXITCODE -eq 0) {
         Write-Host "`n" + ("=" * 80)
         Write-Host "BUILD AND TEST SUCCESSFUL!" -ForegroundColor Green
         Write-Host ("=" * 80)
         Write-Host "`nBuilt libraries:"
-        Write-Host "  - $dllPath\client.dll"
-        Write-Host "  - $dllPath\server.dll"
-        Write-Host "  - $libPath\client.lib"
-        Write-Host "  - $libPath\server.lib"
+        Write-Host "  Client:"
+        Write-Host "    - Runtime: $clientLibPath\client.dll"
+        Write-Host "    - C Library: $clientCLibPath\client.lib"
+        Write-Host "  Server:"
+        Write-Host "    - Runtime: $serverLibPath\server.dll"
+        Write-Host "    - C Library: $serverCLibPath\server.lib"
+        Write-Host "  Headers: src\export.h (use from source)"
         Write-Host "`nPython utilities:"
         Write-Host "  - pow_utils_client.py"
         Write-Host "  - pow_utils_server.py"
