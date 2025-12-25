@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "repository": "https://github.com/QudsLab/Proof-of-work",
-  "generated": "2025-12-24T01:06:05.244633Z",
+  "generated": "2025-12-25T01:07:21.527341Z",
   "platforms": {
     "android": {
       "arm64": {
@@ -210,8 +210,8 @@
             "size": 187958,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/client/client.dll",
             "hashes": {
-              "md5": "d75be76404d345b70e2047d777d7443d",
-              "sha256": "a0e60bca3aae2f352c9a5e5e992aa0ff500041e59779d7a7a5fc6e5971293d2c"
+              "md5": "afb93d1286d03a0167915ad8a809a77d",
+              "sha256": "cc390b98116550bce8e4b5f23ef2b713b22f21cca7acbf056cb3a5c40c49dcbe"
             }
           }
         ],
@@ -220,8 +220,8 @@
             "size": 187442,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/server/server.dll",
             "hashes": {
-              "md5": "14b03dd5846b3044ebb9fea14ab39547",
-              "sha256": "c77b3a78bea23336ce6741b060bbf76da4f9bdded0d751b53c733bccf2048806"
+              "md5": "7eade0caafa01c569f630b4cea074522",
+              "sha256": "dd5b1a713195ca5da9677e13c4b4e7e631a49a4a79b236ad92226a6c216652f7"
             }
           }
         ]
@@ -232,8 +232,8 @@
             "size": 187958,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/client/client.dll",
             "hashes": {
-              "md5": "e63059901f47c665245c8498513f4904",
-              "sha256": "80490a202066fda208d4c79f6863a3f2f6c90ff963c036363c5d55cc4f4b26bc"
+              "md5": "368ee9f90eaf29e4b4410b3ea50804be",
+              "sha256": "98b24e605907592d07e10bfa311cfe650bfd2ac334a7a10be04628b76af458a5"
             }
           }
         ],
@@ -242,8 +242,8 @@
             "size": 187442,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/server/server.dll",
             "hashes": {
-              "md5": "42212c34307f5e9b4a933ec595d3c73d",
-              "sha256": "77628818e1d624b10c0ad73e34dff787c93c2eb6022ab98ad14f1bc17976e700"
+              "md5": "9f77601dfea6ddfbd56fd8a14bc91601",
+              "sha256": "c8e0366a37024839e54a0b25509ca1b9673e06e768f49d982e19829ba0a84c24"
             }
           }
         ]
