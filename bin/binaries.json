@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "repository": "https://github.com/QudsLab/Proof-of-work",
-  "generated": "2026-05-11T02:01:29.884734Z",
+  "generated": "2026-05-12T02:11:06.747166Z",
   "platforms": {
     "android": {
       "arm64": {
@@ -139,6 +139,30 @@
         ]
       }
     },
+    "macos": {
+      "arm64": {
+        "client": [
+          {
+            "size": 239984,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/client/libclient.dylib",
+            "hashes": {
+              "md5": "e3dd67d205962a425acb939e1ac851a7",
+              "sha256": "ea83cec36b9da15732c180fd03703b2491ca8507291d9451ec1a0ae15e4251f4"
+            }
+          }
+        ],
+        "server": [
+          {
+            "size": 239984,
+            "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/macos/arm64/server/libserver.dylib",
+            "hashes": {
+              "md5": "fdc68379afb3cec577c78092048f023f",
+              "sha256": "e5d0c0a80462279c265cc222c285dd3444d485f90a102ba4057bba5a452d8e3a"
+            }
+          }
+        ]
+      }
+    },
     "wasm": {
       "wasm": {
         "client": [
@@ -186,8 +210,8 @@
             "size": 187958,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/client/client.dll",
             "hashes": {
-              "md5": "7c75592419920cbb52f0023bcd673aa6",
-              "sha256": "d880fb397cfedb6571fa1ea978b2dae6dc3a85222ab80f36afa035cca2500428"
+              "md5": "589ed97257e2e6e115789749faea33de",
+              "sha256": "39ec3a5bea6db8ef6f7b59b05af5d9d2302ecd147f04e9bc4926d1cfc6faeb60"
             }
           }
         ],
@@ -196,8 +220,8 @@
             "size": 187442,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/server/server.dll",
             "hashes": {
-              "md5": "b988b25056f61d6563d613db81a4b1c5",
-              "sha256": "a4fdbfc6c657bb575fac9fd97237345e6944f3de1766cce82ceddf1bef333bbb"
+              "md5": "992062219b3f3aa832a0213fae42c6c1",
+              "sha256": "2cc1d15c077a8c2e06982acea5ca64eea304502aa2726aee448f55b3fc0a66b4"
             }
           }
         ]
@@ -208,8 +232,8 @@
             "size": 187958,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/client/client.dll",
             "hashes": {
-              "md5": "09445212e9b3585180a656ca168b17b9",
-              "sha256": "93afbbb2c0e3582ac182a419ebae1b034768335ac768c0e62472e8cbb612ec17"
+              "md5": "e65131ee254399c53b4d79809ff3c77d",
+              "sha256": "062f24583762d4d4754a496799a2d8a64f24ca979d289ba9e67f3c33bd4892ba"
             }
           }
         ],
@@ -218,8 +242,8 @@
             "size": 187442,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/server/server.dll",
             "hashes": {
-              "md5": "36db37270569a78c4dda74d1800318d8",
-              "sha256": "2f3ce9d815db436e8173787e3ce443ca1cb0574cef7b8453662adc2f8724f7ef"
+              "md5": "092e2b689d7d5c69e3d184f968b70091",
+              "sha256": "3dac990a82751dd219dc98622bc102d3017411fe53802fe5d0574f8828dfcafc"
             }
           }
         ]
