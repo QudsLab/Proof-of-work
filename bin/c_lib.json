@@ -1,12 +1,11 @@
 {
   "version": "1.0.0",
   "repository": "https://github.com/QudsLab/Proof-of-work",
-  "generated": "2026-05-21T02:28:55.100433Z",
+  "generated": "2026-05-22T02:29:52.300735Z",
   "note": "Development libraries for rare cases where static linking is needed",
   "platforms": {
     "android": {},
     "linux": {},
-    "macos": {},
     "wasm": {},
     "windows": {
       "32": {
@@ -15,8 +14,8 @@
             "size": 2902,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/client/c_lib/client.lib",
             "hashes": {
-              "md5": "0b9857ee007a3831fe1c31daca884002",
-              "sha256": "3123f132f701895944c4c1a07c0b3b0fcc9f1c8fcc5ad7660163d5d9c30d645e"
+              "md5": "9dbb301d0630d8f7219a5b0f2e4f11fe",
+              "sha256": "c4bd951036ede81b827e254a9496d745792a688ff7e11abc97ae688d9cfd2b9e"
             }
           }
         ],
@@ -25,8 +24,8 @@
             "size": 2878,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/server/c_lib/server.lib",
             "hashes": {
-              "md5": "3a974d9199619a973c517dfc0a1928cb",
-              "sha256": "75edb015ba285591b760d094ed39dd6a35674782e0cd46296781034af06262a3"
+              "md5": "2c859585bfa36543c0c8e00b09945651",
+              "sha256": "5ef53823d9c5e6e282520661ba683179cc9348ceb2ac171ad139b94b499e16b3"
             }
           }
         ]
@@ -37,8 +36,8 @@
             "size": 2902,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/client/c_lib/client.lib",
             "hashes": {
-              "md5": "430c3f62f3e296a47dd60d9db6773404",
-              "sha256": "7d9941fdd915c0b311ad044435bb02a667e31eeb39bb19ed78d63b74a83ed90e"
+              "md5": "57b811b23d7ee964bed2c586b836942f",
+              "sha256": "21a85b120f090514e3002ae56de76a6c3a505b0a01f08df5482f46cb24904a1c"
             }
           }
         ],
@@ -47,8 +46,8 @@
             "size": 2878,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/server/c_lib/server.lib",
             "hashes": {
-              "md5": "7ffeb98fb1c098513d9a6378ae8905f9",
-              "sha256": "c91e6a391876fe7ea955c27cb49d4eba52087b9c9486a94219f67e03dddf786d"
+              "md5": "ec38a6aa8940494195699ec6bfd16eda",
+              "sha256": "181645c81f8709edfa7ca5fdda643ae586fcf3f6621f9166d34104b9eede4370"
             }
           }
         ]
