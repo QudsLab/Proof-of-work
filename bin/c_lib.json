@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "repository": "https://github.com/QudsLab/Proof-of-work",
-  "generated": "2026-07-28T02:01:06.302700Z",
+  "generated": "2026-07-30T01:45:16.741216Z",
   "note": "Development libraries for rare cases where static linking is needed",
   "platforms": {
     "android": {},
@@ -15,8 +15,8 @@
             "size": 2902,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/client/c_lib/client.lib",
             "hashes": {
-              "md5": "3c6abc5b8277c852290daa4c94630934",
-              "sha256": "1098374d1bd8317503d93bc90a988bc260c25529c681f995b7bf5770569d768a"
+              "md5": "c13a13fc03aaf26710e40291af7b10a2",
+              "sha256": "765b0967c21b27c7de6f09710b2f08274a3e6d8bccb16e1ba029fde908bbbb38"
             }
           }
         ],
@@ -25,8 +25,8 @@
             "size": 2878,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/32/server/c_lib/server.lib",
             "hashes": {
-              "md5": "43298be7760b41a6d5dbe94da347d01c",
-              "sha256": "3ae891fc08a0f23410b0a78c856ed3659ef9aeaf39e1a8380622f70b3f073d1b"
+              "md5": "d0f360cb59db9fc5d96f6bcd94d87df6",
+              "sha256": "cfe8c49944de5818272794bc0a2924c4fab5bd96233dec12d20b1381e21482f0"
             }
           }
         ]
@@ -37,8 +37,8 @@
             "size": 2902,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/client/c_lib/client.lib",
             "hashes": {
-              "md5": "06133211653503388c3020a46f59f088",
-              "sha256": "cfc6c25e795695a487a835e966698d2349f587100198b0c890578747fecc4a4b"
+              "md5": "476d09f285de4efec7f021b50fc18c23",
+              "sha256": "061c98d298f97ff0b0721c67c82b34df20967550431429dcdb0199c87b672e35"
             }
           }
         ],
@@ -47,8 +47,8 @@
             "size": 2878,
             "url": "https://raw.githubusercontent.com/QudsLab/Proof-of-work/main/bin/win/64/server/c_lib/server.lib",
             "hashes": {
-              "md5": "4501ee27c46cefcbf00db0deb7ae977c",
-              "sha256": "7ed10d4bb31d33f63833649e1f8477afaefadb9e4d6ef3377554bccc108e4005"
+              "md5": "8c106f23c942a04bee8ed49c320021c3",
+              "sha256": "2a309e3bad7af738e85091afca23a83c304f3a2042559476ffd1c32fdde7500b"
             }
           }
         ]
