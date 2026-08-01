@@ -1,7 +1,7 @@
 # Proof-of-Work Binaries
 
 **Repository**: [QudsLab/Proof-of-work](https://github.com/QudsLab/Proof-of-work)
-**Generated**: 2026-07-30 01:45 UTC
+**Generated**: 2026-08-01 01:54 UTC
 
 This directory contains pre-built binaries for multiple platforms.
 
