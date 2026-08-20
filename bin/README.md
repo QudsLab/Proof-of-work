@@ -1,7 +1,7 @@
 # Proof-of-Work Binaries
 
 **Repository**: [QudsLab/Proof-of-work](https://github.com/QudsLab/Proof-of-work)
-**Generated**: 2026-08-19 00:40 UTC
+**Generated**: 2026-08-20 00:40 UTC
 
 This directory contains pre-built binaries for multiple platforms.
 
@@ -17,6 +17,7 @@ This directory contains pre-built binaries for multiple platforms.
 | Windows | 32 | 1 | 1 |
 | Windows | 64 | 1 | 1 |
 | Linux | 64 | 1 | 1 |
+| Linux | arm64 | 1 | 1 |
 | Macos | arm64 | 1 | 1 |
 | Android | arm64 | 1 | 1 |
 | Android | armv7 | 1 | 1 |
